@@ -41,11 +41,12 @@ defmodule Torngen.Entrypoint do
     IO.puts("This program comes with ABSOLUTELY NO WARRANTY.")
     IO.puts("This is free software, and you are welcome to redistribute it")
     IO.puts("under certain conditions.")
-    
+
     System.halt(0)
   end
 
-  def entrypoint(%Torngen.Options{file: file_path} = _opts) when is_nil(file_path) or Kernel.length(file_path) == 0 do
+  def entrypoint(%Torngen.Options{file: file_path} = _opts)
+      when is_nil(file_path) or Kernel.length(file_path) == 0 do
     # TODO: Get file from Torn's servers
   end
 
@@ -54,6 +55,7 @@ defmodule Torngen.Entrypoint do
       {:ok, data} when is_binary(data) ->
         data
         |> Torngen.Spec.decode()
+        |> Torngen.Spec.parse()
         |> IO.inspect()
 
       # TODO: Process JSON spec
