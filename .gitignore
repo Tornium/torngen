@@ -21,3 +21,9 @@ torngen-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Open API specification for the Torn API
+openapi.json
+
+# CLI binary 
+torngen
