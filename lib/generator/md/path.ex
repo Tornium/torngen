@@ -14,7 +14,7 @@ defmodule Torngen.Generator.Markdown.Path do
       |> EEx.eval_file(path: path, spec: spec)
       |> Torngen.Generator.cleanup()
 
-    {"parameter/#{path.path}.md", rendered_string}
+    {"path/#{path.path}.md", rendered_string}
   end
 
   defp do_generate_all(
