@@ -3,10 +3,11 @@ defmodule Torngen.Options do
           version: boolean(),
           help: boolean(),
           license: boolean(),
-          file: String.t() | nil
+          file: String.t() | nil,
+          outdir: String.t()
         }
 
-  defstruct [:version, :help, :license, :file]
+  defstruct [:version, :help, :license, :file, :outdir]
 
   @schema [
     help: [
@@ -25,9 +26,14 @@ defmodule Torngen.Options do
       doc: "Show license"
     ],
     file: [
-      type: :string,
-      default: "",
+      type: :any,
+      default: nil,
       doc: "Path to JSON spec file"
+    ],
+    outdir: [
+      type: :string,
+      default: ".",
+      doc: "Path to the output directory"
     ]
   ]
 
@@ -50,7 +56,8 @@ defmodule Torngen.Options do
       version: Keyword.get(opts, :version, false),
       help: Keyword.get(opts, :help, false),
       license: Keyword.get(opts, :license, false),
-      file: Keyword.get(opts, :file, nil)
+      file: Keyword.get(opts, :file, nil),
+      outdir: Keyword.get(opts, :outdir, ".")
     }
   end
 end

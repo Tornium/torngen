@@ -2,7 +2,7 @@ defmodule Torngen.Entrypoint do
   def main(argv) do
     {opts, _positional_opts, _errors} =
       OptionParser.parse(argv,
-        switches: [version: :boolean, help: :boolean, license: :boolean, file: :string],
+        switches: [version: :boolean, help: :boolean, license: :boolean, file: :string, outdir: :string],
         aliases: [v: :version, h: :help]
       )
 
@@ -21,6 +21,8 @@ defmodule Torngen.Entrypoint do
 
   def entrypoint(%Torngen.Options{help: true} = _opts) do
     IO.puts("Usage: torngen [options...]")
+    IO.puts(" --file                    Set the input Open API JSON file")
+    IO.puts(" --outdir                  Set the output directory (default: \".\")")
     IO.puts(" --version, -v             Show version")
     IO.puts(" --help, -h                Show help message")
     IO.puts(" --license                 Show license")
@@ -47,7 +49,11 @@ defmodule Torngen.Entrypoint do
 
   def entrypoint(%Torngen.Options{file: file_path} = _opts)
       when is_nil(file_path) or Kernel.length(file_path) == 0 do
-    # TODO: Get file from Torn's servers
+    "https://www.torn.com/swagger/openapi.json"
+    |> Req.get!()
+    |> Map.get(:body)
+    |> Torngen.Spec.parse()
+    |> Torngen.Generator.Markdown.generate()
   end
 
   def entrypoint(%Torngen.Options{file: file_path} = _opts) do
@@ -57,8 +63,6 @@ defmodule Torngen.Entrypoint do
         |> Torngen.Spec.decode()
         |> Torngen.Spec.parse()
         |> Torngen.Generator.Markdown.generate()
-
-      # TODO: Process JSON spec
 
       {:error, reason} ->
         IO.puts(:stderr, "#{file_path}: #{:file.format_error(reason)}")
