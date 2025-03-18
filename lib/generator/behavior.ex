@@ -4,5 +4,7 @@ defmodule Torngen.Generator.Behavior do
   """
   @callback language() :: String.t()
 
+  @callback base_path() :: String.t()
+
   @callback generate(spec :: Torngen.Spec.t()) :: nil
 end

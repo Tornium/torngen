@@ -5,6 +5,9 @@ defmodule Torngen.Generator.Python do
   def language(), do: "Python 3.x"
 
   @impl true
+  def base_path(), do: "lib/generator/python"
+
+  @impl true
   def generate(%Torngen.Spec{} = _spec) do
   end
 end

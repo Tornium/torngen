@@ -5,6 +5,9 @@ defmodule Torngen.Generator.Elixir do
   def language(), do: "Elixir"
 
   @impl true
+  def base_path(), do: "lib/generator/elixir"
+
+  @impl true
   def generate(%Torngen.Spec{} = _spec) do
   end
 end

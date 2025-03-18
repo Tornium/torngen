@@ -1,7 +1,7 @@
 defmodule Torngen.Spec.Path do
   defstruct [:path, :tags, :summary, :description, :parameters, :response]
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           path: String.t(),
           tags: [String.t()],
           summary: String.t() | nil,

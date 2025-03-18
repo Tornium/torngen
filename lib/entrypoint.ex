@@ -56,13 +56,9 @@ defmodule Torngen.Entrypoint do
         data
         |> Torngen.Spec.decode()
         |> Torngen.Spec.parse()
-        |> IO.inspect()
+        |> Torngen.Generator.Markdown.generate()
 
       # TODO: Process JSON spec
-
-      {:ok, _} ->
-        IO.puts("Invalid data format")
-        System.halt(1)
 
       {:error, reason} ->
         IO.puts(:stderr, "#{file_path}: #{:file.format_error(reason)}")
