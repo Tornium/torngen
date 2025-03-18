@@ -74,8 +74,7 @@ defmodule Torngen.Spec.Parameter do
 
   @spec parse(parameter :: map(), spec :: Torngen.Spec.t()) :: t()
   def parse(%{"$ref" => path}, %Torngen.Spec{} = _spec) when is_binary(path) do
-    # TODO: Handle referenced paths
-    nil
+    %Torngen.Spec.Reference{ref: path}
   end
 
   def parse(

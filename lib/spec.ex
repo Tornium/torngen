@@ -27,27 +27,33 @@ defmodule Torngen.Spec do
       {:error, {:unexpected_sequence, _, _}} ->
         IO.puts(:stderr, "Unable to parse JSON: contains invalid UTF-8 escape")
         System.halt(1)
-
-      {:error, reason} ->
-        IO.puts(:stderr, "Unable to parse JSON (invalid error): #{inspect(reason)}")
-        System.halt(1)
     end
   end
 
+  @spec parse(data :: map()) :: t()
   def parse(
         %{
           "openapi" => open_api_version,
+          "info" => info,
           "paths" => paths,
           "components" => %{"parameters" => parameters}
         } = _data
-      ) do
+      )
+      when is_map(info) do
     %Torngen.Spec{
       open_api_version: open_api_version
     }
+    |> parse_api_data(info)
     |> Torngen.Spec.Parameter.parse_many(parameters)
     |> Torngen.Spec.Path.parse_many(paths)
     |> IO.inspect()
+  end
 
-    # TODO: Put API info
+  @spec parse_api_data(spec :: t(), data :: map()) :: t()
+  defp parse_api_data(
+         %Torngen.Spec{} = spec,
+         %{"title" => title, "version" => version, "description" => description} = _data
+       ) do
+    %Torngen.Spec{spec | api_name: title, api_version: version, api_description: description}
   end
 end
