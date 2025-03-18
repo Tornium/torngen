@@ -79,7 +79,7 @@ defmodule Torngen.Spec.Parameter do
 
   def parse(
         %{
-          "schema" => schema
+          "schema" => _schema
         } = parameter,
         %Torngen.Spec{} = spec
       ) do
@@ -95,7 +95,7 @@ defmodule Torngen.Spec.Parameter do
 
   def parse(
         %{
-          "content" => content
+          "content" => _content
         } = parameter,
         %Torngen.Spec{} = spec
       ) do
@@ -107,6 +107,26 @@ defmodule Torngen.Spec.Parameter do
     |> Map.delete("content")
     |> parse(spec)
     |> Map.put(:body, parsed_content)
+  end
+
+  def parse(
+        %{
+          "reference" => reference,
+          "name" => name,
+          "in" => "path"
+        } = parameter,
+        %Torngen.Spec{} = _spec
+      ) do
+    # Parameter is required when `:in` equals `:path`
+
+    %Torngen.Spec.Parameter{
+      reference: reference,
+      name: name,
+      in: :path,
+      description: Map.get(parameter, "description", "N/A"),
+      required: true,
+      deprecated: Map.get(parameter, "deprecated", false)
+    }
   end
 
   def parse(
@@ -125,7 +145,5 @@ defmodule Torngen.Spec.Parameter do
       required: Map.get(parameter, "required", false),
       deprecated: Map.get(parameter, "deprecated", false)
     }
-
-    # TODO: Update `required` to be true when `:in` is `:path`
   end
 end

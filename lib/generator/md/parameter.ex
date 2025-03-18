@@ -15,7 +15,6 @@ defmodule Torngen.Generator.Markdown.Parameter do
   def generate(%Torngen.Spec.Parameter{} = parameter, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
 
-    # TODO: switch to `EEx.compile_file`
     rendered_string = 
       "#{Torngen.Generator.Markdown.base_path()}/parameter.md.eex"
       |> EEx.eval_file(parameter: parameter, spec: spec, external: external)

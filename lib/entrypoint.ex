@@ -75,7 +75,6 @@ defmodule Torngen.Entrypoint do
       {:error, reason} ->
         IO.puts(:stderr, "#{file_path}: #{:file.format_error(reason)}")
 
-        # TODO: Get proper error code
         System.halt(1)
     end
   end

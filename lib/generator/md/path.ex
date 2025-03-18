@@ -8,7 +8,6 @@ defmodule Torngen.Generator.Markdown.Path do
 
   @impl true
   def generate(%Torngen.Spec.Path{} = path, %Torngen.Spec{} = spec) do
-    # TODO: switch to `EEx.compile_file`
     rendered_string = 
       "#{Torngen.Generator.Markdown.base_path()}/path.md.eex"
       |> EEx.eval_file(path: path, spec: spec)

@@ -8,7 +8,7 @@
 
 ## Curl Example
 ```sh
-curl -XGET "<%= path |> Torngen.Spec.Path.url(spec) |> URI.to_string() %>"
+curl -XGET -H "Authorization: ApiKey apikey1234567890" <%= path |> Torngen.Spec.Path.url(spec) |> URI.to_string() %>"
 ```
 
 ## Tags
