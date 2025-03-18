@@ -6,10 +6,10 @@ defmodule Torngen.Spec.Reference do
         }
 
   @spec retrieve(spec :: Torngen.Spec.t(), reference_identifier :: String.t()) ::
-          Torngen.Spec.Path.t()
+          Torngen.Spec.Parameter.t()
   def retrieve(
         %Torngen.Spec{parameters: parameters} = _spec,
-        "#/components/parameters" <> reference_id
+        "#/components/parameters/" <> reference_id
       )
       when is_binary(reference_id) do
     Enum.find(parameters, fn %Torngen.Spec.Parameter{reference: reference} ->

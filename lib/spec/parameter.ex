@@ -121,7 +121,7 @@ defmodule Torngen.Spec.Parameter do
       reference: reference,
       name: name,
       in: String.to_atom(parameter_in),
-      description: Map.get(parameter, "in"),
+      description: Map.get(parameter, "description", "N/A"),
       required: Map.get(parameter, "required", false),
       deprecated: Map.get(parameter, "deprecated", false)
     }

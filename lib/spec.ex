@@ -1,8 +1,17 @@
 defmodule Torngen.Spec do
-  defstruct [:open_api_version, :api_name, :api_description, :api_version, :parameters, :paths]
+  defstruct [
+    :open_api_version,
+    :api_servers,
+    :api_name,
+    :api_description,
+    :api_version,
+    :parameters,
+    :paths
+  ]
 
   @type t :: %__MODULE__{
           open_api_version: String.t(),
+          api_servers: [String.t()],
           api_name: String.t(),
           api_description: String.t(),
           api_version: String.t(),
@@ -34,6 +43,7 @@ defmodule Torngen.Spec do
   def parse(
         %{
           "openapi" => open_api_version,
+          "servers" => servers,
           "info" => info,
           "paths" => paths,
           "components" => %{"parameters" => parameters}
@@ -44,6 +54,7 @@ defmodule Torngen.Spec do
       open_api_version: open_api_version
     }
     |> parse_api_data(info)
+    |> parse_servers(servers)
     |> Torngen.Spec.Parameter.parse_many(parameters)
     |> Torngen.Spec.Path.parse_many(paths)
   end
@@ -54,5 +65,13 @@ defmodule Torngen.Spec do
          %{"title" => title, "version" => version, "description" => description} = _data
        ) do
     %Torngen.Spec{spec | api_name: title, api_version: version, api_description: description}
+  end
+
+  defp parse_servers(
+         %Torngen.Spec{} = spec,
+         servers
+       )
+       when is_list(servers) do
+    %Torngen.Spec{spec | api_servers: Enum.map(servers, fn %{"url" => url} -> url end)}
   end
 end

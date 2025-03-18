@@ -65,4 +65,10 @@ defmodule Torngen.Spec.Path do
   def parse(%Torngen.Spec{} = spec, [], path_accumulator) do
     %Torngen.Spec{spec | paths: path_accumulator}
   end
+
+  def url(%Torngen.Spec.Path{path: path}, %Torngen.Spec{api_servers: [server_url | _]} = _spec) do
+    server_url
+    |> URI.new!()
+    |> URI.append_path("/" <> path)
+  end
 end

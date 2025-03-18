@@ -1,1 +1,15 @@
 # GET <%= path.path %>
+<%= path.summary %>
+<%= path.description %>
+
+## Parameters
+<%= for parameter <- path.parameters do %>
+<% {_link, generated_md} = Torngen.Generator.Markdown.Parameter.generate(parameter, spec, external: true) %>- <%= generated_md %><% end %>
+
+## Curl Example
+```sh
+curl -XGET "<%= path |> Torngen.Spec.Path.url(spec) |> URI.to_string() %>"
+```
+
+## Tags
+<%= for tag <- path.tags do "- #{tag}\n" end %>

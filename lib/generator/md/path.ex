@@ -9,11 +9,12 @@ defmodule Torngen.Generator.Markdown.Path do
   @impl true
   def generate(%Torngen.Spec.Path{} = path, %Torngen.Spec{} = spec) do
     # TODO: switch to `EEx.compile_file`
-    {"paths/#{path.path}.md",
-     EEx.eval_file("#{Torngen.Generator.Markdown.base_path()}/path.md.eex",
-       path: path,
-       spec: spec
-     )}
+    rendered_string = 
+      "#{Torngen.Generator.Markdown.base_path()}/path.md.eex"
+      |> EEx.eval_file(path: path, spec: spec)
+      |> Torngen.Generator.cleanup()
+
+    {"parameter/#{path.path}.md", rendered_string}
   end
 
   defp do_generate_all(

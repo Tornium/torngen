@@ -1,0 +1,7 @@
+<%= if parameter.reference && !external do %>
+# Parameter `<%= parameter.name %>`
+
+<%= parameter.description %>
+<% else %>
+`<%= parameter.name %>`: <%= parameter.description %>
+<% end %>
