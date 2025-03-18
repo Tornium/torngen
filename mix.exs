@@ -23,7 +23,7 @@ defmodule Torngen.MixProject do
   defp deps do
     [
       {:nimble_options, "~> 1.0"},
-      {:req, "~> 0.5"},
+      {:req, "~> 0.5"}
     ]
   end
 

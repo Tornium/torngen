@@ -9,7 +9,14 @@ defmodule Torngen.Generator.Markdown do
 
   @impl true
   def generate(%Torngen.Spec{} = spec) do
-    spec
-    |> Torngen.Generator.Markdown.Path.generate_all()
+    files =
+      [
+        spec
+        |> Torngen.Generator.Markdown.Path.generate_all()
+        |> Map.new()
+      ]
+      |> Enum.reduce(&Map.merge/2)
+      |> IO.inspect()
+      |> Torngen.Generator.FS.write_files()
   end
 end

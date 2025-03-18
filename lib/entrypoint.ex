@@ -1,8 +1,15 @@
 defmodule Torngen.Entrypoint do
+  @spec main(argv :: OptionParser.argv()) :: no_return()
   def main(argv) do
     {opts, _positional_opts, _errors} =
       OptionParser.parse(argv,
-        switches: [version: :boolean, help: :boolean, license: :boolean, file: :string, outdir: :string],
+        switches: [
+          version: :boolean,
+          help: :boolean,
+          license: :boolean,
+          file: :string,
+          outdir: :string
+        ],
         aliases: [v: :version, h: :help]
       )
 
@@ -19,6 +26,7 @@ defmodule Torngen.Entrypoint do
     end
   end
 
+  @spec entrypoint(otps :: Torngen.Options.t()) :: no_return()
   def entrypoint(%Torngen.Options{help: true} = _opts) do
     IO.puts("Usage: torngen [options...]")
     IO.puts(" --file                    Set the input Open API JSON file")

@@ -20,7 +20,7 @@ defmodule Torngen.Spec.Path do
         %Torngen.Spec{} = spec,
         [
           {
-            path,
+            "/" <> path,
             %{
               "get" =>
                 %{
