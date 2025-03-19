@@ -3,7 +3,7 @@ defmodule Torngen.Generator do
     [
       Torngen.Generator.Markdown,
       Torngen.Generator.Python,
-      Torngen.Generator.Elixir,
+      Torngen.Generator.Elixir
     ]
   end
 

@@ -7,8 +7,8 @@ defmodule Torngen.Spec.Path do
           summary: String.t() | nil,
           description: String.t(),
           parameters: [Torngen.Spec.Parameter.t()],
-          # TODO: Add struct for response
-          response: nil
+          response: Torngen.Spec.Reference.t() | Torngen.Spec.Reference.t() | nil
+          # TODO: Remove nil from type of response
         }
 
   @spec parse_many(spec :: Torngen.Spec.t(), paths :: map()) :: Torngen.Spec.t()

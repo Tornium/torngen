@@ -6,7 +6,8 @@ defmodule Torngen.Spec do
     :api_description,
     :api_version,
     :parameters,
-    :paths
+    :paths,
+    :schemas
   ]
 
   @type t :: %__MODULE__{
@@ -16,7 +17,8 @@ defmodule Torngen.Spec do
           api_description: String.t(),
           api_version: String.t(),
           parameters: [Torngen.Spec.Parameter.t()],
-          paths: [Torngen.Spec.Path.t()]
+          paths: [Torngen.Spec.Path.t()],
+          schemas: [Torngen.Spec.Schema.schema_types()]
         }
 
   @spec decode(data :: String.t()) :: map()
@@ -46,7 +48,7 @@ defmodule Torngen.Spec do
           "servers" => servers,
           "info" => info,
           "paths" => paths,
-          "components" => %{"parameters" => parameters}
+          "components" => %{"parameters" => parameters, "schemas" => schemas}
         } = _data
       )
       when is_map(info) do
@@ -57,6 +59,8 @@ defmodule Torngen.Spec do
     |> parse_servers(servers)
     |> Torngen.Spec.Parameter.parse_many(parameters)
     |> Torngen.Spec.Path.parse_many(paths)
+    |> Torngen.Spec.Schema.parse_many(schemas)
+    |> IO.inspect()
   end
 
   @spec parse_api_data(spec :: t(), data :: map()) :: t()
