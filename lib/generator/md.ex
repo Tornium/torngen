@@ -15,10 +15,12 @@ defmodule Torngen.Generator.Markdown do
       |> Map.new(),
       spec
       |> Torngen.Generator.Markdown.Path.generate_all()
+      |> Map.new(),
+      spec
+      |> Torngen.Generator.Markdown.Schema.generate_all()
       |> Map.new()
     ]
     |> Enum.reduce(&Map.merge/2)
-    |> IO.inspect()
     |> Torngen.Generator.FS.write_files()
   end
 end

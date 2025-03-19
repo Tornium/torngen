@@ -1,14 +1,18 @@
-# GET <%= path.path %>
+# GET `<%= path.path %>`
 <%= path.summary %>
 <%= path.description %>
 
 ## Parameters
-<%= for parameter <- path.parameters do %>
+<%= if Kernel.length(path.parameters) == 0 do %>No parameters<% else %><%= for parameter <- path.parameters do %>
 <% {_link, generated_md} = Torngen.Generator.Markdown.Parameter.generate(parameter, spec, external: true) %>- <%= generated_md %><% end %>
+<% end %>
+
+<% {schema_link, schema_generated_md} = Torngen.Generator.Markdown.Schema.generate(path.response, spec) %>## [Schema](./.out/<%= schema_link %>)
+<%= schema_generated_md %>
 
 ## Curl Example
 ```sh
-curl -XGET -H "Authorization: ApiKey apikey1234567890" <%= path |> Torngen.Spec.Path.url(spec) |> URI.to_string() %>"
+curl -XGET -H "Authorization: ApiKey apikey1234567890" "<%= path |> Torngen.Spec.Path.url(spec) |> URI.to_string() %>"
 ```
 
 ## Tags

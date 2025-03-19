@@ -7,8 +7,7 @@ defmodule Torngen.Spec.Path do
           summary: String.t() | nil,
           description: String.t(),
           parameters: [Torngen.Spec.Parameter.t()],
-          response: Torngen.Spec.Reference.t() | Torngen.Spec.Reference.t() | nil
-          # TODO: Remove nil from type of response
+          response: Torngen.Spec.Reference.t() | Torngen.Spec.Schema.schema_types()
         }
 
   @spec parse_many(spec :: Torngen.Spec.t(), paths :: map()) :: Torngen.Spec.t()
@@ -56,7 +55,7 @@ defmodule Torngen.Spec.Path do
         summary: Map.get(data, "summary", nil),
         description: description,
         parameters: parameters,
-        response: response_schema
+        response: Torngen.Spec.Schema.parse(spec, response_schema)
       }
       | path_accumulator
     ])

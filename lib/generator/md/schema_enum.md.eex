@@ -1,0 +1,6 @@
+<%= if schema.reference && !external do %>
+An enumerated type with the following valid values (type <%= schema.type %>):
+<%= for value <- schema.values do "- #{value}\n" end %>
+<% else %>
+Enumerated type of <%=schema.type %>
+<% end %>

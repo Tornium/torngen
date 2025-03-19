@@ -1,0 +1,7 @@
+<% {link, generated_md} = Torngen.Generator.Markdown.Schema.generate(schema.value, spec, external: true) %>
+
+<%= if link == "schema/.md" do %>
+`<%= schema.key %>` => <%= generated_md %>
+<% else %>
+[`<%= schema.key %>`](./.out/<%= link %>) => <%= generated_md %>
+<% end %>

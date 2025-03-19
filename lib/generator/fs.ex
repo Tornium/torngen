@@ -15,7 +15,6 @@ defmodule Torngen.Generator.FS do
     ".out"
     |> Path.join(directory)
     |> Path.expand()
-    |> IO.inspect()
     |> File.mkdir_p!()
 
     do_create_dirs(remaining_directories)

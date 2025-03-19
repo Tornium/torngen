@@ -3,5 +3,5 @@
 
 <%= parameter.description %>
 <% else %>
-`<%= parameter.name %>`: <%= parameter.description %>
+`<%= parameter.name %>` => <%= parameter.description %>
 <% end %>

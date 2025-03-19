@@ -1,0 +1,1 @@
+Static values of type <%= Atom.to_string(schema.type) %>

@@ -48,23 +48,23 @@ defmodule Torngen.Spec.Schema do
 
   def parse(
         %Torngen.Spec{} = spec,
-        %{"oneOf" => properties} = schema
+        %{"oneOf" => _properties} = schema
       ) do
-    nil
+    Torngen.Spec.Schema.OneOf.parse(spec, schema)
   end
 
   def parse(
         %Torngen.Spec{} = spec,
-        %{"anyOf" => properties} = schema
+        %{"anyOf" => _properties} = schema
       ) do
-    nil
+    Torngen.Spec.Schema.AnyOf.parse(spec, schema)
   end
 
   def parse(
         %Torngen.Spec{} = spec,
-        %{"allOf" => properties} = schema
+        %{"allOf" => _properties} = schema
       ) do
-    nil
+    Torngen.Spec.Schema.AllOf.parse(spec, schema)
   end
 
   # NOTE: The `not` keyword is not implemented

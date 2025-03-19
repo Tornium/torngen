@@ -1,0 +1,11 @@
+<%= if schema.reference && !external do %>
+An associative array with the following key-value pairs:
+<%= for pair <- schema.pairs do %>
+<% {_link, generated_md} = Torngen.Generator.Markdown.Schema.generate(pair, spec) %> - <%= generated_md %><% end %>
+<% else %>
+<%= if schema.reference do %>
+[associative array](./.out/schema/<%= schema.reference %>.md)
+<% else %>
+Unknown associative array
+<% end %>
+<% end %>

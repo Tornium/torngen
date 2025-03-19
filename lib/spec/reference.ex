@@ -16,4 +16,14 @@ defmodule Torngen.Spec.Reference do
       reference == reference_id
     end)
   end
+
+  def retrieve(
+        %Torngen.Spec{schemas: schemas} = _spec,
+        "#/components/schemas/" <> reference_id
+      )
+      when is_binary(reference_id) do
+    Enum.find(schemas, fn %{reference: reference} ->
+      reference == reference_id
+    end)
+  end
 end

@@ -60,7 +60,6 @@ defmodule Torngen.Spec do
     |> Torngen.Spec.Parameter.parse_many(parameters)
     |> Torngen.Spec.Path.parse_many(paths)
     |> Torngen.Spec.Schema.parse_many(schemas)
-    |> IO.inspect()
   end
 
   @spec parse_api_data(spec :: t(), data :: map()) :: t()
