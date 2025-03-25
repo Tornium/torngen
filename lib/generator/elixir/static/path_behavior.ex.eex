@@ -1,0 +1,39 @@
+defmodule Torngen.Client.Path do
+  @doc """
+  Gets the path for a request against a path in the specification.
+  """
+  @callback path() :: String.t()
+
+  @doc """
+  Gets the base path and the selection required against a path in the selection.
+  """
+  @callback path_selection() :: {String.t(), String.t()}
+
+  @callback parameter(atom(), any()) :: {Torngen.Spec.Parameter.parameter_locations(), atom(), term()}
+
+  def path_selection(path) do
+    path
+    |> String.split("/")
+    |> do_path_selection()
+  end
+
+  defp do_path_selection(path_sections) when Kernel.length(path_sections) == 3 do
+    # eg /faction/{id}/basic
+    path =
+      path_sections
+      |> Enum.slice(0..1)
+      |> Enum.join("/")
+
+    {path, Enum.at(path_sections, -1)}
+  end
+
+  defp do_path_selection(path_sections) when Kernel.length(path_sections) == 2 do
+    # eg /faction/applications
+    {Enum.at(path_sections, 0), Enum.at(path_sections, 1)}
+  end
+
+  defp do_path_selection(path_sections) when Kernel.length(path_sections) == 1 do
+    # eg /faction
+    {Enum.at(path_sections, 0), nil}
+  end
+end

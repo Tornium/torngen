@@ -1,0 +1,4 @@
+  def parameter(:<%= parameter.name %>, value) when is_binary(name) do
+    # <%= parameter.description %>
+    {:<%=parameter.in%>, :<%=parameter.name%>, value}
+  end

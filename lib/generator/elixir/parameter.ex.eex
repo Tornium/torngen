@@ -1,0 +1,11 @@
+defmodule Torngen.Client.Parameter.<%= parameter.reference || parameter.name %> do
+  @moduledoc """<% split_description = String.split(parameter.description, ". ") %>
+  <%= Enum.at(split_description, 0) %>
+
+  <%= if Kernel.length(split_description) > 1, do: split_description |> Enum.slice(1..Kernel.length(split_description)) |> Enum.join(". "), else: "No further description." %>
+  """
+
+  @required <%= parameter.required %>
+  @deprecated <%= parameter.deprecated %>
+  @parameter_in :<%= parameter.in %>
+end

@@ -6,6 +6,8 @@ defmodule Torngen.Spec.Parameter do
   - [Swagger Specification](https://swagger.io/specification#parameter-object)
   """
 
+  @type parameter_locations :: :path | :query | :header | :cookie
+
   defstruct [
     :name,
     :in,
@@ -29,7 +31,7 @@ defmodule Torngen.Spec.Parameter do
   @type t :: %__MODULE__{
           reference: String.t() | nil,
           name: String.t(),
-          in: :path | :query | :header | :cookie,
+          in: parameter_locations(),
           description: String.t() | nil,
           required: boolean(),
           deprecated: boolean(),

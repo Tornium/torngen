@@ -1,0 +1,28 @@
+defmodule Torngen.Client.Path.<%= path_module_name %> do
+  @moduledoc """
+  <%= path.summary %>.
+
+  <%= path.description %>
+
+  ## Parmeters<%= for parameter <- path.parameters, do: "\n  - #{Torngen.Generator.Elixir.Parameter.generate_docs(parameter, spec)}" %>
+
+  ## Response
+  NYI
+
+  ## Tags<%= for tag <- path.tags, do: "\n  - #{tag}" %>
+  """
+
+  @behaviour Torngen.Client.Path
+
+  @path "<%= path.path %>"
+
+  @impl true
+  def path(), do: @path
+
+  @impl true
+  def path_selection(), do: Torngen.Client.Path.path_selection(@path)
+  <%= for parameter <- path.parameters do %>
+  @impl true
+  <%= Torngen.Generator.Elixir.Parameter.generate_handler(parameter, spec) %>
+  <% end %>
+end

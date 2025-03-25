@@ -4,10 +4,11 @@ defmodule Torngen.Options do
           help: boolean(),
           license: boolean(),
           file: String.t() | nil,
-          outdir: String.t()
+          outdir: String.t(),
+          generator: String.t()
         }
 
-  defstruct [:version, :help, :license, :file, :outdir]
+  defstruct [:version, :help, :license, :file, :outdir, :generator]
 
   @schema [
     help: [
@@ -32,8 +33,13 @@ defmodule Torngen.Options do
     ],
     outdir: [
       type: :string,
-      default: ".",
+      default: ".out/",
       doc: "Path to the output directory"
+    ],
+    generator: [
+      type: :string,
+      default: "markdown",
+      doc: "Generator to be used"
     ]
   ]
 
@@ -57,7 +63,8 @@ defmodule Torngen.Options do
       help: Keyword.get(opts, :help, false),
       license: Keyword.get(opts, :license, false),
       file: Keyword.get(opts, :file, nil),
-      outdir: Keyword.get(opts, :outdir, ".")
+      outdir: Keyword.get(opts, :outdir, ".out/"),
+      generator: Keyword.get(opts, :generator, "markdown")
     }
   end
 end

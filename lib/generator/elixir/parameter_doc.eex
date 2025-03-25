@@ -1,0 +1,2 @@
+<% split_description = String.split(parameter.description, ". ") %>
+<%= parameter.name %>: <%= Enum.at(split_description, 0) %>

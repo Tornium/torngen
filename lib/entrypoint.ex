@@ -8,7 +8,8 @@ defmodule Torngen.Entrypoint do
           help: :boolean,
           license: :boolean,
           file: :string,
-          outdir: :string
+          outdir: :string,
+          generator: :string
         ],
         aliases: [v: :version, h: :help]
       )
@@ -30,7 +31,8 @@ defmodule Torngen.Entrypoint do
   def entrypoint(%Torngen.Options{help: true} = _opts) do
     IO.puts("Usage: torngen [options...]")
     IO.puts(" --file                    Set the input Open API JSON file")
-    IO.puts(" --outdir                  Set the output directory (default: \".\")")
+    IO.puts(" --outdir                  Set the output directory (default: \".out/\")")
+    IO.puts(" --generator               Set the code generator (default: \"markdown\")")
     IO.puts(" --version, -v             Show version")
     IO.puts(" --help, -h                Show help message")
     IO.puts(" --license                 Show license")
@@ -64,13 +66,13 @@ defmodule Torngen.Entrypoint do
     |> Torngen.Generator.Markdown.generate()
   end
 
-  def entrypoint(%Torngen.Options{file: file_path} = _opts) do
+  def entrypoint(%Torngen.Options{file: file_path} = opts) do
     case File.read(file_path) do
       {:ok, data} when is_binary(data) ->
         data
         |> Torngen.Spec.decode()
         |> Torngen.Spec.parse()
-        |> Torngen.Generator.Markdown.generate()
+        |> Torngen.Generator.generate(opts)
 
       {:error, reason} ->
         IO.puts(:stderr, "#{file_path}: #{:file.format_error(reason)}")

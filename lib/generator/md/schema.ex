@@ -24,6 +24,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.Static{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_static.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -35,6 +36,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.Array{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_array.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -46,6 +48,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.Object{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_object.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -57,6 +60,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.ObjectPair{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_object_pair.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -68,6 +72,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.Enum{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_enum.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -79,6 +84,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.OneOf{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_one_of.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -90,6 +96,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.AllOf{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_all_of.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
@@ -101,6 +108,7 @@ defmodule Torngen.Generator.Markdown.Schema do
   @impl true
   def generate(%Torngen.Spec.Schema.AnyOf{} = schema, %Torngen.Spec{} = spec, opts) do
     external = Keyword.get(opts, :external, false)
+
     rendered_string =
       "#{Torngen.Generator.Markdown.base_path()}/schema_any_of.md.eex"
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
