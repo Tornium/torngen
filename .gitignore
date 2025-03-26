@@ -24,6 +24,3 @@ torngen-*.tar
 
 # Open API specification for the Torn API
 openapi.json
-
-# CLI binary 
-torngen
