@@ -9,6 +9,9 @@ defmodule Torngen.Client.Path do
   """
   @callback path_selection() :: {String.t(), String.t()}
 
+  @doc """
+  Get the type of parameter.
+  """
   @callback parameter(atom(), any()) :: {Torngen.Spec.Parameter.parameter_locations(), atom(), term()}
 
   def path_selection(path) do

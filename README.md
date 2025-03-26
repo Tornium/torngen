@@ -28,8 +28,6 @@ def deps do
 end
 ```
 
-This library is also available as an [escript](https://hexdocs.pm/mix/main/Mix.Tasks.Escript.Build.html)-based CLI tool requiring only Erlang/OTP.
-
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/torngen>.
