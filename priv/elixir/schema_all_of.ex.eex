@@ -3,4 +3,6 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   """
 
   @behaviour Torngen.Client.Schema
+
+  @type t :: [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.Schema.resolve_type(type, spec) end) |> Enum.join(" | ") %>]
 end

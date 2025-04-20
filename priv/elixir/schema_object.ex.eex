@@ -5,10 +5,10 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   @behaviour Torngen.Client.Schema
 
   defstruct [<%= for pair <- schema.pairs do %>
-    :<%= pair.key %>,<% end %>
+    :<%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>,<% end %>
   ]
 
   @type t :: %__MODULE__{<%= for pair <- schema.pairs do %>
-    <%= pair.key %>: <%= Torngen.Generator.Elixir.Schema.resolve_type(pair.value, spec) %>,<% end %>
+    <%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>: <%= Torngen.Generator.Elixir.Schema.resolve_type(pair.value, spec) %>,<% end %>
   }
 end

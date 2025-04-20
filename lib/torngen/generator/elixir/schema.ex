@@ -13,8 +13,6 @@ defmodule Torngen.Generator.Elixir.Schema do
 
   @impl true
   def generate(:any = schema, %Torngen.Spec{} = spec, _opts) do
-    IO.inspect(schema)
-
     rendered_string =
       "#{Torngen.Generator.Elixir.priv_path()}/schema_any.ex.eex"
       |> EEx.eval_file(schema: schema, spec: spec)
@@ -173,7 +171,7 @@ defmodule Torngen.Generator.Elixir.Schema do
     # The key of an object pair should always be a string due to the JSON Schema spec (assumed)
     # TODO: Update parser to add required flag to k-v pairs and update the type resolver
 
-    "#{key} => #{resolve_type(value, spec)}"
+    ":#{Torngen.Generator.Elixir.normalize_string(key)} => #{resolve_type(value, spec)}"
   end
 
   def resolve_type(
@@ -185,17 +183,11 @@ defmodule Torngen.Generator.Elixir.Schema do
   end
 
   def resolve_type(
-        %Torngen.Spec.Schema.Enum{values: values, type: :string} = _schema,
-        %Torngen.Spec{} = _spec
+        %Torngen.Spec.Schema.Enum{type: type} = _schema,
+        %Torngen.Spec{} = spec
       ) do
-    values
-    |> Enum.map(fn value -> "\"#{value}\"" end)
-    |> Enum.join(", ")
-  end
-
-  def resolve_type(%Torngen.Spec.Schema.Enum{values: values} = _schema, %Torngen.Spec{} = _spec) do
-    values
-    |> Enum.join(", ")
+    %Torngen.Spec.Schema.Static{type: type}
+    |> resolve_type(spec)
   end
 
   def resolve_type(%Torngen.Spec.Schema.OneOf{reference: reference}, %Torngen.Spec{} = _spec)
@@ -221,14 +213,14 @@ defmodule Torngen.Generator.Elixir.Schema do
     "Torngen.Client.Schema.#{reference}.t()"
   end
 
-  def resolve_type(%Torngen.Spec.Schema.AllOf{types: types}, %Torngen.Spec{} = spec)
+  def resolve_type(%Torngen.Spec.Schema.AllOf{types: types} = _schema, %Torngen.Spec{} = spec)
       when Kernel.length(types) == 1 do
     types
     |> Enum.at(0)
     |> resolve_type(spec)
   end
 
-  def resolve_type(%Torngen.Spec.Schema.AllOf{types: types}, %Torngen.Spec{} = spec) do
+  def resolve_type(%Torngen.Spec.Schema.AllOf{types: types} = _schema, %Torngen.Spec{} = spec) do
     joined_types =
       types
       |> Enum.map(fn type -> resolve_type(type, spec) end)

@@ -3,7 +3,7 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   An enumerated type describing `#/components/schemas/<%= schema.reference %>` of type <%= schema.type %>.
   """
 
-  @behavior Torngen.Client.Schema
+  @behaviour Torngen.Client.Schema
 
   <%= case schema.type do %>
   <% :string -> %>@type t :: String.t()

@@ -46,4 +46,16 @@ defmodule Torngen.Generator.Elixir do
   defp do_generate_static([], accumulator) do
     accumulator
   end
+
+  @doc false
+  @spec normalize_string(input :: String.t()) :: String.t()
+  def normalize_string(input) when is_binary(input) do
+    # Temporary solution for spec having object-pair keys such as `co-leader_id`
+
+    if String.contains?(input, "-") do
+      "\"#{input}\""
+    else
+      input
+    end
+  end
 end
