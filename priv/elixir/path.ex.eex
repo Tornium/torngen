@@ -12,9 +12,13 @@ defmodule Torngen.Client.Path.<%= path_module_name %> do
   ## Tags<%= for tag <- path.tags, do: "\n  - #{tag}" %>
   """
 
+  import Torngen.Client.Path, only: [defparameter: 3]
+
   @behaviour Torngen.Client.Path
 
   @path "<%= path.path %>"
+
+  Module.register_attribute(__MODULE__, :parameter_keys, accumulate: true)
 
   @impl true
   def path(), do: @path
@@ -25,4 +29,11 @@ defmodule Torngen.Client.Path.<%= path_module_name %> do
   @impl true
   <%= Torngen.Generator.Elixir.Parameter.generate_handler(parameter, spec) %>
   <% end %>
+  @impl true
+  def parameter(parameter_name, _value) when is_atom(parameter_name) do
+    :error
+  end
+
+  @impl true
+  def parameters(), do: @parameter_keys
 end

@@ -1,4 +1,5 @@
-  def parameter(:<%= parameter.name %>, value) do
+  <%= if parameter.deprecated, do: "@deprecated" %>
+  defparameter :<%= parameter.name %>, value do
     # <%= parameter.description %>
     {:<%=parameter.in%>, :<%=parameter.name%>, value}
   end
