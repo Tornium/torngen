@@ -1,0 +1,26 @@
+defmodule Torngen.Client.Schema.<%= schema.reference %> do
+  @moduledoc """
+  An enumerated type describing `#/components/schemas/<%= schema.reference %>` of type <%= schema.type %>.
+  """
+
+  @behavior Torngen.Client.Schema
+
+  <%= case schema.type do %>
+  <% :string -> %>@type t :: String.t()
+  <% :number -> %>@type t :: integer() | float()
+  <% :integer -> %>@type t :: integer()
+  <% :boolean -> %>@type t :: boolean()
+  <% end %>
+
+  <%= if schema.type == :string do %>
+  @values [<%= for value <- schema.values do "\"#{value}\", " end %>]
+  <% else %>
+  @values [<%= for value <- schema.values do "#{value}, " end %>]
+  <% end %>
+
+  @spec values() :: [t()]
+  def values, do: @values
+
+  @spec valid?(term()) :: boolean()
+  def valid?(value), do: value in @values
+end

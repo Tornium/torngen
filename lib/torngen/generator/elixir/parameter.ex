@@ -32,7 +32,7 @@ defmodule Torngen.Generator.Elixir.Parameter do
   end
 
   def generate_docs(%Torngen.Spec.Parameter{} = parameter, %Torngen.Spec{} = _spec) do
-    "#{Torngen.Generator.Elixir.priv_path()}/parameter_doc.eex"
+    "#{Torngen.Generator.Elixir.priv_path()}/parameter_doc.ex.eex"
     |> EEx.eval_file(parameter: parameter)
     |> Torngen.Generator.cleanup()
   end

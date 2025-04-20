@@ -11,7 +11,7 @@ defmodule Torngen.Spec.Schema.AnyOf do
         %{"anyOf" => schemas} = schema
       )
       when is_list(schemas) do
-    %Torngen.Spec.Schema.AllOf{
+    %Torngen.Spec.Schema.AnyOf{
       types: do_parse(spec, schemas, []),
       reference: Map.get(schema, "reference", nil)
     }

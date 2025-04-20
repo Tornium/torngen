@@ -1,6 +1,6 @@
 defmodule Torngen.Spec.Schema.Static do
   @moduledoc ~S"""
-  Schema of static types such as integers.
+  Schema for literal of schemas/sub-schemas such as integers.
   """
 
   defstruct [:type, reference: nil]

@@ -1,0 +1,8 @@
+<% {link, generated_md} = Torngen.Generator.Elixir.Schema.generate_docs(schema.value, spec) %>
+
+<%= if link == "schema/.ex" do %>
+`<%= schema.key %>` => <%= generated_md %>
+<% else %>
+[`<%= schema.key %>`](./.out/<%= link %>) => <%= generated_md %>
+<% end %>
+

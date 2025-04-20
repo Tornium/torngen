@@ -24,9 +24,11 @@ defmodule Torngen.Spec.Parameter do
   ## Fields
     * `name` - Name of the parameter. Correspond to the key used for the parameter (except for `:header` parameters).
     * `in` - Location of the parameter.
+    * `body` - N/A
+    * `reference` - Reference identifier to a parameter's schema.
     * `description` - Description of the parameter (either text or markdown).
     * `required` - Mandatory parameter flag.
-    * `
+    * `deprecated` - Deprecated parameter flag.
   """
   @type t :: %__MODULE__{
           reference: String.t() | nil,

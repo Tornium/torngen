@@ -6,9 +6,6 @@ defmodule Torngen.Client.Path.<%= path_module_name %> do
 
   ## Parmeters<%= for parameter <- path.parameters, do: "\n  - #{Torngen.Generator.Elixir.Parameter.generate_docs(parameter, spec)}" %>
 
-  ## Response
-  NYI
-
   ## Tags<%= for tag <- path.tags, do: "\n  - #{tag}" %>
   """
 

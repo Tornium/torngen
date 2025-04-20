@@ -6,7 +6,7 @@ defmodule Torngen.Spec.Reference do
         }
 
   @spec retrieve(spec :: Torngen.Spec.t(), reference_identifier :: String.t()) ::
-          Torngen.Spec.Parameter.t()
+          Torngen.Spec.Parameter.t() | Torngen.Spec.Schema.schema_types()
   def retrieve(
         %Torngen.Spec{parameters: parameters} = _spec,
         "#/components/parameters/" <> reference_id

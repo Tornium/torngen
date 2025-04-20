@@ -3,7 +3,7 @@ defmodule Torngen.Spec.Schema.ObjectPair do
 
   @type t :: %__MODULE__{
           key: String.t(),
-          value: Torngen.Spec.Schema.types() | Torngen.Spec.Reference.t()
+          value: Torngen.Spec.Schema.schema_types() | Torngen.Spec.Reference.t()
         }
 
   def parse_many(%Torngen.Spec{} = spec, properties) when is_list(properties) do

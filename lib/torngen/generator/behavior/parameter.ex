@@ -9,6 +9,6 @@ defmodule Torngen.Generator.Behavior.Parameter do
   @callback generate(
               parameter_spec :: Torngen.Spec.Parameter.t() | Torngen.Spec.Reference.t(),
               spec :: Torngen.Spec.t(),
-              opts :: Keyword
+              opts :: Keyword.t()
             ) :: tuple()
 end

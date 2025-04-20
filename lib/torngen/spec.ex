@@ -1,21 +1,21 @@
 defmodule Torngen.Spec do
   defstruct [
     :open_api_version,
-    :api_servers,
     :api_name,
     :api_description,
     :api_version,
-    :parameters,
-    :paths,
-    :schemas
+    api_servers: [],
+    parameters: [],
+    paths: [],
+    schemas: []
   ]
 
   @type t :: %__MODULE__{
-          open_api_version: String.t(),
+          open_api_version: String.t() | nil,
           api_servers: [String.t()],
-          api_name: String.t(),
-          api_description: String.t(),
-          api_version: String.t(),
+          api_name: String.t() | nil,
+          api_description: String.t() | nil,
+          api_version: String.t() | nil,
           parameters: [Torngen.Spec.Parameter.t()],
           paths: [Torngen.Spec.Path.t()],
           schemas: [Torngen.Spec.Schema.schema_types()]

@@ -1,5 +1,6 @@
 defmodule Torngen.Generator.FS do
-  @outdir Application.get_env(:torngen, :out_dir) || raise "Missing output directory in config"
+  @outdir Application.compile_env(:torngen, :out_dir) ||
+            raise("Missing output directory in config")
 
   @spec write_files(map()) :: nil
   def write_files(%{} = files) do

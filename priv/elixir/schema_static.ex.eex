@@ -1,0 +1,3 @@
+defmodule Torngen.Client.Schema.<%= schema.reference %> do
+  @type t :: <%= Torngen.Generator.Elixir.Schema.resolve_type(schema, spec) %>
+end

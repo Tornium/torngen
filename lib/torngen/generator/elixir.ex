@@ -16,10 +16,10 @@ defmodule Torngen.Generator.Elixir do
       |> Map.new(),
       spec
       |> Torngen.Generator.Elixir.Path.generate_all()
+      |> Map.new(),
+      spec
+      |> Torngen.Generator.Elixir.Schema.generate_all()
       |> Map.new()
-      # spec
-      # |> Torngen.Generator.Elixir.Schema.generate_all()
-      # |> Map.new()
     ]
     |> Enum.reduce(&Map.merge/2)
     |> Torngen.Generator.FS.write_files()

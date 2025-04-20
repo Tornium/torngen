@@ -12,11 +12,12 @@ defmodule Torngen.Generator do
   def generate(%Torngen.Spec{} = spec) do
     generator = Application.get_env(:torngen, :generator) || raise "Generator required in config"
 
-    generator_module = case generator do
-      :md -> Torngen.Generator.Markdown
-      :elixir -> Torngen.Generator.Elixir
-      _ -> raise "Unknown generator \"#{generator}\" provided in config"
-    end
+    generator_module =
+      case generator do
+        :md -> Torngen.Generator.Markdown
+        :elixir -> Torngen.Generator.Elixir
+        _ -> raise "Unknown generator \"#{generator}\" provided in config"
+      end
 
     generator_module.generate(spec)
   end

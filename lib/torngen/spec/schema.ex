@@ -11,9 +11,13 @@ defmodule Torngen.Spec.Schema do
           | Torngen.Spec.Schema.Enum.t()
           | Torngen.Spec.Schema.Static.t()
           | Torngen.Spec.Schema.Array.t()
+          | Torngen.Spec.Schema.OneOf.t()
+          | Torngen.Spec.Schema.AllOf.t()
+          | Torngen.Spec.Schema.AnyOf.t()
+          | Torngen.Spec.Reference.t()
           | :any
 
-  @spec parse_many(spec :: Torngen.Spec.t(), schemas :: map()) :: [schema_types()]
+  @spec parse_many(spec :: Torngen.Spec.t(), schemas :: map()) :: Torngen.Spec.t()
   def parse_many(%Torngen.Spec{} = spec, %{} = schemas) when is_map(schemas) do
     do_parse(spec, Map.to_list(schemas), [])
   end
@@ -22,7 +26,7 @@ defmodule Torngen.Spec.Schema do
           spec :: Torngen.Spec.t(),
           schema :: [map()],
           schema_accumulator :: [schema_types()]
-        ) :: [schema_types()]
+        ) :: Torngen.Spec.t()
   defp do_parse(
          %Torngen.Spec{} = spec,
          [{schema_ref, %{} = schema} | remaining_schemas],

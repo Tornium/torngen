@@ -1,0 +1,14 @@
+defmodule Torngen.Client.Schema.<%= schema.reference %> do
+  @moduledoc """
+  """
+
+  @behaviour Torngen.Client.Schema
+
+  defstruct [<%= for pair <- schema.pairs do %>
+    :<%= pair.key %>,<% end %>
+  ]
+
+  @type t :: %__MODULE__{<%= for pair <- schema.pairs do %>
+    <%= pair.key %>: nil,<% end %>
+  }
+end

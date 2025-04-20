@@ -7,6 +7,6 @@ defmodule Torngen.Generator.Behavior.Schema do
   @callback generate(
               schema_spec :: Torngen.Spec.Schema.schema_types(),
               spec :: Torngen.Spec.t(),
-              opts :: Keyword
+              opts :: Keyword.t()
             ) :: tuple()
 end

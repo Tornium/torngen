@@ -1,0 +1,2 @@
+<% {link, generated_md} = Torngen.Generator.Markdown.Schema.generate(schema.type, spec, external: true) %>
+An array of [values](./.out/<%= link %>): <%= generated_md %>

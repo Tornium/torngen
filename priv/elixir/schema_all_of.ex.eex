@@ -1,0 +1,6 @@
+defmodule Torngen.Client.Schema.<%= schema.reference %> do
+  @moduledoc """
+  """
+
+  @behaviour Torngen.Client.Schema
+end
