@@ -1,7 +1,0 @@
-A value of any of the following types:
-- String
-- Number
-- Integer
-- Boolean
-- Array<any>
-- Object<any>

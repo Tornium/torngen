@@ -24,7 +24,6 @@ defmodule Torngen.Spec.Path do
               "get" =>
                 %{
                   "tags" => tags,
-                  "description" => description,
                   "responses" => %{
                     "200" => %{
                       "content" => %{"application/json" => %{"schema" => response_schema}}
@@ -53,7 +52,7 @@ defmodule Torngen.Spec.Path do
         path: path,
         tags: tags,
         summary: Map.get(data, "summary", nil),
-        description: description,
+        description: Map.get(data, "description", nil),
         parameters: parameters,
         response: Torngen.Spec.Schema.parse(spec, response_schema)
       }

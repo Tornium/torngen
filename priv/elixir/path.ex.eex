@@ -14,6 +14,7 @@ defmodule Torngen.Client.Path.<%= path_module_name %> do
   @behaviour Torngen.Client.Path
 
   @path "<%= path.path %>"
+  @response_modules [<%= Enum.join(response_module_names, ", ") %>]
 
   Module.register_attribute(__MODULE__, :parameter_keys, accumulate: true)
 
@@ -33,4 +34,7 @@ defmodule Torngen.Client.Path.<%= path_module_name %> do
 
   @impl true
   def parameters(), do: @parameter_keys
+
+  @impl true
+  def parse(response), do: Torngen.Client.Path.parse(@response_modules, response)
 end

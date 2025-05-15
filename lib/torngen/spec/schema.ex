@@ -105,4 +105,25 @@ defmodule Torngen.Spec.Schema do
   def parse(%Torngen.Spec{} = _spec, %{} = _schema) do
     :any
   end
+
+  @spec references(spec :: Torngen.Spec.t(), schema :: Torngen.Spec.Schema.schema_types()) :: [String.t()]
+  def references(%Torngen.Spec{} = spec, %Torngen.Spec.Reference{ref: ref}) do
+    references(spec, Torngen.Spec.Reference.retrieve(spec, ref))
+  end
+
+  def references(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.AllOf{types: types}) do
+    Enum.flat_map(types, fn schema -> references(spec, schema) end)
+  end
+
+  def references(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.AnyOf{types: types}) do
+    Enum.flat_map(types, fn schema -> references(spec, schema) end)
+  end
+
+  def references(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.OneOf{types: types}) do
+    Enum.flat_map(types, fn schema -> references(spec, schema) end)
+  end
+
+  def references(%Torngen.Spec{} = _spec, schema) do
+    [schema.reference]
+  end
 end
