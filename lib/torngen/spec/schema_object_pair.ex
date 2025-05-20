@@ -1,9 +1,10 @@
 defmodule Torngen.Spec.Schema.ObjectPair do
-  defstruct [:key, :value]
+  defstruct [:key, :value, :deprecated]
 
   @type t :: %__MODULE__{
           key: String.t(),
-          value: Torngen.Spec.Schema.schema_types() | Torngen.Spec.Reference.t()
+          value: Torngen.Spec.Schema.schema_types() | Torngen.Spec.Reference.t(),
+          deprecated: boolean()
         }
 
   def parse_many(%Torngen.Spec{} = spec, properties) when is_list(properties) do
@@ -26,7 +27,8 @@ defmodule Torngen.Spec.Schema.ObjectPair do
        when is_binary(key) do
     %Torngen.Spec.Schema.ObjectPair{
       key: key,
-      value: Torngen.Spec.Schema.parse(spec, property)
+      value: Torngen.Spec.Schema.parse(spec, property),
+      deprecated: Map.get(property, "deprecated", false)
     }
   end
 end

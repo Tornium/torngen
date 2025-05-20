@@ -1,7 +1,9 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
   @moduledoc """
-  An enumerated type describing `#/components/schemas/<%= schema.reference %>` of type <%= schema.type %>.
+  An enumerated type describing `<%= schema.reference %>` of type <%= schema.type %>.
   """
+
+  require Logger
 
   @behaviour Torngen.Client.Schema
 
@@ -29,7 +31,7 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
     if validate?(data) do
       data
     else
-      IO.inspect(data, label: "Invalid enum value of <%= schema.reference %>")
+      Logger.warning("Invalid enum value #{inspect(data)} of <%= schema.reference %>")
       nil
     end
   end

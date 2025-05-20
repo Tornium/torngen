@@ -45,8 +45,6 @@ defmodule Torngen.Spec.Path do
         |> Torngen.Spec.Parameter.parse(spec)
       end)
 
-    # TODO: Parse the response
-
     parse(spec, paths_remaining, [
       %Torngen.Spec.Path{
         path: path,

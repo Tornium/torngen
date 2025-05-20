@@ -52,7 +52,6 @@ defmodule Torngen.Spec do
         } = _data
       )
       when is_map(info) do
-    # TODO: Strip HTML elements such as `<br>` and replace with `\n`
 
     %Torngen.Spec{
       open_api_version: open_api_version
