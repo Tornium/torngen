@@ -12,9 +12,6 @@ defmodule Torngen.Generator.Elixir do
     [
       generate_statics(),
       spec
-      |> Torngen.Generator.Elixir.Parameter.generate_all()
-      |> Map.new(),
-      spec
       |> Torngen.Generator.Elixir.Path.generate_all()
       |> Map.new(),
       spec
@@ -57,5 +54,66 @@ defmodule Torngen.Generator.Elixir do
     else
       input
     end
+  end
+
+  @doc false
+  @spec repr(spec :: Torngen.Spec.t(), element :: Torngen.Spec.Schema.schema_types()) :: any()
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Reference{ref: ref}) do
+    dereferenced = Torngen.Spec.Reference.retrieve(spec, ref)
+    repr(spec, dereferenced)
+  end
+
+  def repr(%Torngen.Spec{} = _spec, %{reference: ref})
+      when not is_nil(ref) do
+    # This applies to anything with a reference as the referenced module can have its own parsing and validation
+    # excluding Tornium.Spec.Reference as that needs to dereference the reference first
+    # e.g. objects and statics containing a reference
+    Torngen.Client.Schema
+    |> Module.concat(ref)
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.Object{pairs: pairs}) do
+    {
+      :object,
+      pairs
+      |> Enum.map(fn %Torngen.Spec.Schema.ObjectPair{} = pair -> repr(spec, pair) end)
+      |> Map.new()
+    }
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{key: key, value: value})
+      when is_binary(key) do
+    # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
+    {key, repr(spec, value)}
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.Array{type: array_type}) do
+    {:array, repr(spec, array_type)}
+  end
+
+  def repr(%Torngen.Spec{} = _spec, %Torngen.Spec.Schema.Static{type: type}) do
+    {:static, type}
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.OneOf{types: types}) do
+    {:one_of, 
+      types
+      |> Enum.map(fn %{} = type -> repr(spec, type) end)
+    }
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.AllOf{types: types}) do
+    {:all_of, 
+      types
+      |> Enum.map(fn %{} = type -> repr(spec, type) end)
+    }
+  end
+
+  def repr(%Torngen.Spec{} = _spec, %Torngen.Spec.Schema.Enum{type: type, values: values}) do
+    {:enum, type, values}
+  end
+
+  def repr(%Torngen.Spec{} = _spec, element) do
+    element
   end
 end

@@ -1,5 +1,8 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
   @moduledoc """
+  [SHORT DESCRIPTION]
+
+  Type: AnyOf
   """
 
   @behaviour Torngen.Client.Schema

@@ -6,7 +6,7 @@ defmodule Torngen.Spec.Schema.Static do
   defstruct [:type, reference: nil]
 
   @type types :: :enum
-  @type child_types :: :string | :number | :integer | :boolean
+  @type child_types :: :string | :number | :integer | :boolean | :null
   @type t :: %__MODULE__{
           type: child_types(),
           reference: Torngen.Spec.Reference.t() | nil

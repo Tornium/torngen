@@ -1,3 +1,15 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
+  @doc """
+  """
+
+  @behaviour Torngen.Client.Schema
+
   @type t :: <%= Torngen.Generator.Elixir.Schema.resolve_type(schema, spec) %>
+
+  @impl true
+  def parse(value), do: value
+  # TODO: Validate type of value
+
+  @impl true
+  def validate?(value), do: Torngen.Client.Schema.validate?(value, {:static, :<%= schema.type %>})
 end
