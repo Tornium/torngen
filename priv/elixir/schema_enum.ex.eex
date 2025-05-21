@@ -1,7 +1,5 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
-  @moduledoc """
-  An enumerated type describing `<%= schema.reference %>` of type <%= schema.type %>.
-  """
+  @moduledoc false
 
   require Logger
 

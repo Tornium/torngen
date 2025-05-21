@@ -1,11 +1,9 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
-  @moduledoc """
-  [SHORT DESCRIPTION]
-
-  Type: AllOf
-  """
+  @moduledoc false
 
   @behaviour Torngen.Client.Schema
 
-  @type t :: [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.Schema.resolve_type(type, spec) end) |> Enum.join(" | ") %>]
+  defstruct [:values]
+
+  @type t :: %__MODULE__{values: [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.Schema.resolve_type(type, spec) end) |> Enum.join(" | ") %>]}
 end

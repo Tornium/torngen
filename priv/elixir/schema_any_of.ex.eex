@@ -1,9 +1,5 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
-  @moduledoc """
-  [SHORT DESCRIPTION]
-
-  Type: AnyOf
-  """
+  @moduledoc false
 
   @behaviour Torngen.Client.Schema
 

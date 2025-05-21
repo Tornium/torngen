@@ -4,7 +4,9 @@ defmodule Torngen.Client.Path.<%= path_module_name %> do
 
   <%= path.description %>
 
-  ## Parmeters<%= for parameter <- path.parameters, do: "\n  - #{Torngen.Generator.Elixir.Parameter.generate_docs(parameter, spec)}" %>
+  ## Parmeters<%= for parameter <- path.parameters, do: "\n - #{Torngen.Generator.Elixir.Parameter.generate_docs(parameter, spec)}" %>
+
+  ## Response Module(s)<%= for module <- response_module_names, do: "\n - #{module}" %>
   """
 
   import Torngen.Client.Path, only: [defparameter: 3]

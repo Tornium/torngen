@@ -1,7 +1,5 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
-  @moduledoc """
-  Literal of type <%= schema.type %>
-  """
+  @moduledoc false
 
   @behaviour Torngen.Client.Schema
 

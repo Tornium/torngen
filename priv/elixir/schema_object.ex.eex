@@ -1,7 +1,5 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
-  @moduledoc """
-  [SHORT DESCRIPTION]
-  """
+  @moduledoc false
 
   use Torngen.Client.SchemaObjectAccess, deprecated: [<%= for pair <- schema.pairs do %><%= if pair.deprecated do %>:<%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>,<% end %><% end %>]
 
