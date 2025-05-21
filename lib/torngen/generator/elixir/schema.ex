@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.Elixir.Schema do
+  @moduledoc false
+
   @behaviour Torngen.Generator.Behavior.Schema
 
   @impl true

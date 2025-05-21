@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.Markdown.Schema do
+  @moduledoc false
+
   @behaviour Torngen.Generator.Behavior.Schema
 
   @impl true

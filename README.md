@@ -1,10 +1,10 @@
 # Torngen
-An [Elixir](https://elixir-lang.org) library to generate clients for the [Torn API](https://www.torn.com/swagger/index.html) in multiple languages. 
+An [Elixir](https://elixir-lang.org) library to generate language-agnostic clients for the [Torn API](https://www.torn.com/swagger/index.html).
 
 ## Supported Languages
-- Markdown (documentation)
-- Python 3.x
 - Elixir
+- Python 3.x (in-dev)
+- Markdown (partial)
 
 ## Installation
 Once [available in Hex](https://hex.pm/docs/publish), the package can be installed

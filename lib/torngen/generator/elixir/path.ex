@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.Elixir.Path do
+  @moduledoc false
+
   @behaviour Torngen.Generator.Behavior.Path
 
   @impl true

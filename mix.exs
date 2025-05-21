@@ -1,13 +1,17 @@
 defmodule Torngen.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
+      name: "Torngen",
+      description: "Language-agnostic code generator for the Torn API",
       app: :torngen,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.18",
-      start_permanent: false,
-      deps: deps()
+      deps: deps(),
+      docs: docs(),
     ]
   end
 
@@ -20,6 +24,16 @@ defmodule Torngen.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    []
+    [
+      {:ex_doc, "~> 0.35", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md", "LICENSE.md"]
+    ]
   end
 end

@@ -1,4 +1,11 @@
 defmodule Torngen.Spec do
+  @moduledoc """
+  An intermediate representation of the Torn API OpenAPI specification.
+
+  ## Example
+  """
+  # TODO: Add more to the moduledoc
+
   defstruct [
     :open_api_version,
     :api_name,
@@ -10,6 +17,21 @@ defmodule Torngen.Spec do
     schemas: []
   ]
 
+  @typedoc """
+  The internal representation of the OpenAPI specification.
+
+  This IR will be utilized when performing the code generation while remaining language-agnostic.
+
+  ## Fields
+  - `open_api_version`: The OpenAPI specification version
+  - `api_servers`: List of base URIs for the API
+  - `api_name`: Name of the API
+  - `api_description`: Description for the API
+  - `api_version`: Semver API versioning
+  - `parameters`: Parsed API parameters
+  - `paths`: Parsed API paths
+  - `schemas`: Parsed API response schemas
+  """
   @type t :: %__MODULE__{
           open_api_version: String.t() | nil,
           api_servers: [String.t()],
@@ -21,6 +43,7 @@ defmodule Torngen.Spec do
           schemas: [Torngen.Spec.Schema.schema_types()]
         }
 
+  @doc false
   @spec decode(data :: String.t()) :: map()
   def decode(data) when is_binary(data) do
     case JSON.decode(data) do
@@ -41,6 +64,9 @@ defmodule Torngen.Spec do
     end
   end
 
+  @doc """
+  Parse the decoded OpenAPI specification into this intermediate representation.
+  """
   @spec parse(data :: map()) :: t()
   def parse(
         %{

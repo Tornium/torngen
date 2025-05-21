@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.Markdown.Parameter do
+  @moduledoc false
+
   @behaviour Torngen.Generator.Behavior.Parameter
 
   @impl true

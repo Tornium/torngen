@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.Behavior.Parameter do
+  @moduledoc false
+
   @callback generate_all(spec :: Torngen.Spec.t()) :: [tuple()]
 
   @callback generate(
