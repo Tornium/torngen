@@ -29,7 +29,6 @@ defmodule Torngen.Generator.FS do
     @outdir
     |> Path.join(file_path)
     |> Path.expand()
-    |> IO.inspect()
     |> File.write!(file_data)
 
     do_write_files(remaining_files)

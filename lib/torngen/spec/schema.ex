@@ -44,7 +44,6 @@ defmodule Torngen.Spec.Schema do
         %Torngen.Spec{} = _spec,
         %{"$ref" => reference} = _schema
       ) do
-    # TODO: Make this a parse function in the reference module
     %Torngen.Spec.Reference{
       ref: reference
     }
