@@ -23,9 +23,7 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   end
 
   @impl true
-  def parse(_data) do
-    nil
-  end
+  def parse(_data), do: nil
 
   @impl true
   def validate?(%{} = data) do
