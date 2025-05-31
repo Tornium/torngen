@@ -158,9 +158,9 @@ defmodule Torngen.Generator.Elixir.Schema do
 
   def resolve_type(%Torngen.Spec.Schema.Object{pairs: pairs} = _schema, %Torngen.Spec{} = spec) do
     map_inner =
-      pairs
-      |> Enum.map(fn %Torngen.Spec.Schema.ObjectPair{} = pair -> resolve_type(pair, spec) end)
-      |> Enum.join(",\n")
+      Enum.map_join(pairs, ",\n", fn %Torngen.Spec.Schema.ObjectPair{} = pair ->
+        resolve_type(pair, spec)
+      end)
 
     "%{#{map_inner}}"
   end
@@ -205,9 +205,7 @@ defmodule Torngen.Generator.Elixir.Schema do
   end
 
   def resolve_type(%Torngen.Spec.Schema.OneOf{types: types}, %Torngen.Spec{} = spec) do
-    types
-    |> Enum.map(fn type -> resolve_type(type, spec) end)
-    |> Enum.join(" | ")
+    Enum.map_join(types, " | ", fn type -> resolve_type(type, spec) end)
   end
 
   def resolve_type(%Torngen.Spec.Schema.AllOf{reference: reference}, %Torngen.Spec{} = _spec)
@@ -223,10 +221,7 @@ defmodule Torngen.Generator.Elixir.Schema do
   end
 
   def resolve_type(%Torngen.Spec.Schema.AllOf{types: types} = _schema, %Torngen.Spec{} = spec) do
-    joined_types =
-      types
-      |> Enum.map(fn type -> resolve_type(type, spec) end)
-      |> Enum.join(" | ")
+    joined_types = Enum.map_join(types, " | ", fn type -> resolve_type(type, spec) end)
 
     "[#{joined_types}]"
   end

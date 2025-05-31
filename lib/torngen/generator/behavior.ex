@@ -1,12 +1,5 @@
 defmodule Torngen.Generator.Behavior do
-  @moduledoc ~S"""
-  [DESCRIPTION]
-
-  Use `@default_impl` to override existing implementations.
-
-  ## Example
-  [EXAMPLE]
-  """
+  @moduledoc false
 
   @doc "Language for which the generator will generate the code from templates."
   @callback language() :: String.t()

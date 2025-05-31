@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.FS do
+  @moduledoc false
+
   @outdir Application.compile_env(:torngen, :out_dir) ||
             raise("Missing output directory in config")
 

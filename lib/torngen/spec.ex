@@ -1,10 +1,7 @@
 defmodule Torngen.Spec do
   @moduledoc """
   An intermediate representation of the Torn API OpenAPI specification.
-
-  ## Example
   """
-  # TODO: Add more to the moduledoc
 
   defstruct [
     :open_api_version,

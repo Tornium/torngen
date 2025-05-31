@@ -1,5 +1,5 @@
 defmodule Torngen.Generator do
-  require Logger
+  @moduledoc false
 
   def generators do
     [

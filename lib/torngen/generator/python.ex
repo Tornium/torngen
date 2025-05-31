@@ -1,4 +1,6 @@
 defmodule Torngen.Generator.Python do
+  @moduledoc false
+
   @behaviour Torngen.Generator.Behavior
 
   @impl true

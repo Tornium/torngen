@@ -13,8 +13,7 @@ defmodule Torngen.Generator.Elixir.Path do
     path_module_name =
       path.path
       |> String.split("/")
-      |> Enum.map(&update_path_name/1)
-      |> Enum.join(".")
+      |> Enum.map_join(".", &update_path_name/1)
 
     response_module_names = Torngen.Spec.Schema.references(spec, path.response)
 
