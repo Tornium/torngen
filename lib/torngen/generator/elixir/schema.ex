@@ -173,7 +173,7 @@ defmodule Torngen.Generator.Elixir.Schema do
     # The key of an object pair should always be a string due to the JSON Schema spec (assumed)
     # TODO: Update parser to add required flag to k-v pairs and update the type resolver
 
-    ":#{Torngen.Generator.Elixir.normalize_string(key)} => #{resolve_type(value, spec)}"
+    ":#{key} => #{resolve_type(value, spec)}"
   end
 
   def resolve_type(

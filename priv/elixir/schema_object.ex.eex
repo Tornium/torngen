@@ -1,24 +1,24 @@
 defmodule Torngen.Client.Schema.<%= schema.reference %> do
   @moduledoc false
 
-  use Torngen.Client.SchemaObjectAccess, deprecated: [<%= for pair <- schema.pairs do %><%= if pair.deprecated do %>:<%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>,<% end %><% end %>]
+  use Torngen.Client.SchemaObjectAccess, deprecated: [<%= for pair <- schema.pairs do %><%= if pair.deprecated do %>:<%= pair.key %>,<% end %><% end %>]
 
   @behaviour Torngen.Client.Schema
 
-  @keys [<%= for pair <- schema.pairs do %>:<%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>,<% end %>]
+  @keys [<%= for pair <- schema.pairs do %>:<%= pair.key %>,<% end %>]
 
   defstruct [<%= for pair <- schema.pairs do %>
-    :<%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>,<% end %>
+    :<%= pair.key %>,<% end %>
   ]
 
   @type t :: %__MODULE__{<%= for pair <- schema.pairs do %>
-    <%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>: <%= Torngen.Generator.Elixir.Schema.resolve_type(pair.value, spec) %>,<% end %>
+    <%= pair.key %>: <%= Torngen.Generator.Elixir.Schema.resolve_type(pair.value, spec) %>,<% end %>
   }
 
   @impl true
   def parse(%{} = data) do
     %__MODULE__{<%= for pair <- schema.pairs do %><%= if not String.contains?(pair.key, "-") do %>
-      <%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>: data |> Map.get("<%= pair.key %>") |> Torngen.Client.Schema.parse(<%= Torngen.Generator.Elixir.repr(spec, pair.value) |> inspect() %>),<% end %><% end %>
+      <%= pair.key %>: data |> Map.get("<%= pair.key %>") |> Torngen.Client.Schema.parse(<%= Torngen.Generator.Elixir.repr(spec, pair.value) |> inspect() %>),<% end %><% end %>
     }
   end
 
@@ -34,7 +34,7 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   end
 
   <%= for pair <- schema.pairs do %>
-  defp validate_key?(:<%= pair.key |> Torngen.Generator.Elixir.normalize_string() %>, value) do
+  defp validate_key?(:<%= pair.key %>, value) do
     Torngen.Client.Schema.validate?(value, <%= Torngen.Generator.Elixir.repr(spec, pair.value) |> inspect() %> )
   end
   <% end %>

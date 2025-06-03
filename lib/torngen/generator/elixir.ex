@@ -47,19 +47,6 @@ defmodule Torngen.Generator.Elixir do
   end
 
   @doc false
-  @spec normalize_string(input :: String.t()) :: String.t()
-  @deprecated "This will be removed once the API removes all keys containing a hyphen"
-  def normalize_string(input) when is_binary(input) do
-    # Temporary solution for spec having object-pair keys such as `co-leader_id`
-
-    if String.contains?(input, "-") do
-      "\"#{input}\""
-    else
-      input
-    end
-  end
-
-  @doc false
   @spec repr(spec :: Torngen.Spec.t(), element :: Torngen.Spec.Schema.schema_types()) :: any()
   def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Reference{ref: ref}) do
     dereferenced = Torngen.Spec.Reference.retrieve(spec, ref)

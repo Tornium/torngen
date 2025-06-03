@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed missing reason in Elixir generation of `@deprecated` tags for parameters
 
+### Removed
+- Removed deprecated `normalize_string`
+
 ## [0.1.0] - 2025-05-31
 ### Added
 - Added Torn APIv2 Open API specification parsing
