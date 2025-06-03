@@ -1,4 +1,4 @@
-  <%= if parameter.deprecated, do: "@deprecated" %>
+  <%= if parameter.deprecated, do: "@deprecated \"See OpenAPI specification\"" %>
   defparameter :<%= parameter.name %>, value do
     # <%= parameter.description %>
     {:<%=parameter.in%>, :<%=parameter.name%>, value}
