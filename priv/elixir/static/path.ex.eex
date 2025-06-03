@@ -55,7 +55,7 @@ defmodule Torngen.Client.Path do
 
       {module_name, parsed_schema}
     end)
-    |> Enum.reject(fn {key, value} -> is_nil(value) end)
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new()
   end
 
