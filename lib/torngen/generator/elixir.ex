@@ -12,7 +12,7 @@ defmodule Torngen.Generator.Elixir do
   @impl true
   def generate(%Torngen.Spec{} = spec) do
     [
-      generate_statics(),
+      generate_statics(spec),
       spec
       |> Torngen.Generator.Elixir.Path.generate_all()
       |> Map.new(),
@@ -24,25 +24,30 @@ defmodule Torngen.Generator.Elixir do
     |> Torngen.Generator.FS.write_files()
   end
 
-  defp generate_statics() do
+  defp generate_statics(%Torngen.Spec{} = spec) do
     "#{Torngen.Generator.Elixir.priv_path()}/static/"
     |> File.ls!()
-    |> do_generate_static([])
+    |> do_generate_static(spec, [])
     |> Map.new()
   end
 
-  defp do_generate_static([file | remaining_files], accumulator) do
+  defp do_generate_static([file | remaining_files], %Torngen.Spec{} = spec, accumulator) do
     path = "#{Torngen.Generator.Elixir.priv_path()}/static/#{file}"
 
     file_name =
       file
       |> String.split(".")
-      |> Enum.at(0)
+      |> Enum.drop(-1)
+      |> Enum.join(".")
 
-    do_generate_static(remaining_files, [{"#{file_name}.ex", File.read!(path)} | accumulator])
+    file_contents =
+      path
+      |> EEx.eval_file(spec: spec)
+
+    do_generate_static(remaining_files, spec, [{file_name, file_contents} | accumulator])
   end
 
-  defp do_generate_static([], accumulator) do
+  defp do_generate_static([], _spec, accumulator) do
     accumulator
   end
 
@@ -86,17 +91,15 @@ defmodule Torngen.Generator.Elixir do
   end
 
   def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.OneOf{types: types}) do
-    {:one_of, 
-      types
-      |> Enum.map(fn %{} = type -> repr(spec, type) end)
-    }
+    {:one_of,
+     types
+     |> Enum.map(fn %{} = type -> repr(spec, type) end)}
   end
 
   def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.AllOf{types: types}) do
-    {:all_of, 
-      types
-      |> Enum.map(fn %{} = type -> repr(spec, type) end)
-    }
+    {:all_of,
+     types
+     |> Enum.map(fn %{} = type -> repr(spec, type) end)}
   end
 
   def repr(%Torngen.Spec{} = _spec, %Torngen.Spec.Schema.Enum{type: type, values: values}) do
