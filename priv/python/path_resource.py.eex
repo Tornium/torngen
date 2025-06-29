@@ -1,0 +1,28 @@
+from base_query import BaseQuery
+from base_path import Path
+from parameter import Parameter
+
+class <%= resource %>(BaseQuery):
+    """
+    A collection of paths representing `<%= resource %>`.
+
+    Paths
+    -----
+    <%= for path <- paths do %>- `/<%= path.path %>` : <%= path.summary || "N/A" %>
+    <% end %>
+
+    <%= for path <- paths do %>`/<%= path.path %>`
+    -------------
+    <%= path.summary %>
+    <%= path.description %>
+
+    # Parameters
+    <%= for parameter_unresolved <- path.parameters do %><% parameter = Torngen.Spec.Reference.maybe_resolve(spec, parameter_unresolved) %>- <%= parameter.name |> Torngen.Generator.Python.handle_reserved() %> : <%= parameter.description %><%= if parameter.deprecated do %> (DEPRECATED) <% end %>
+    <% end %>
+    <% end %>"""
+
+    <%= for path <- paths do %>
+    <%= path.path |> String.split("/") |> List.last() %> = Path("/<%= path.path %>", None, <%= for parameter <- path.parameters, do: "#{Torngen.Generator.Python.Parameter.generate_handler(parameter, spec)}, " %>)<% end %>
+
+    def __init__(self):
+        super().__init__()

@@ -1,0 +1,10 @@
+from ..base_schema import BaseSchema
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+from <%= import %> import <%= import %><% end %>
+
+class <%= schema.reference %>(BaseSchema):
+    <%= if schema.type == :string do %><%!-- TODO: Add type to `values` --%>
+    values = [<%= for value <- schema.values do "\"#{value}\", " end %>]
+    <% else %>
+    values = [<%= for value <- schema.values do "#{value}, " end %>]
+    <% end %>

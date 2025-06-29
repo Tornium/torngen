@@ -1,0 +1,9 @@
+import typing
+
+from ..base_schema import BaseSchema
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+from <%= import %> import <%= import %><% end %>
+
+class <%= schema.reference %>(BaseSchema):
+    <%= for pair <- schema.pairs do %>
+    <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>: <%= Torngen.Generator.Python.Schema.resolve_type(pair.value, spec) %><% end %>

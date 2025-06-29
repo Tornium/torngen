@@ -1,0 +1,6 @@
+from ..base_schema import BaseSchema
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+from <%= import %> import <%= import %><% end %>
+
+class <%= schema.reference %>(BaseSchema):
+    value: <%= Torngen.Generator.Python.Schema.resolve_type(schema, spec) %>

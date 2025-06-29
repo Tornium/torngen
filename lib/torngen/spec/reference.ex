@@ -26,4 +26,10 @@ defmodule Torngen.Spec.Reference do
       reference == reference_id
     end)
   end
+
+  def maybe_resolve(%Torngen.Spec{} = spec, %__MODULE__{ref: ref} = _reference) do
+    retrieve(spec, ref)
+  end
+
+  def maybe_resolve(%Torngen.Spec{} = _spec, value), do: value
 end
