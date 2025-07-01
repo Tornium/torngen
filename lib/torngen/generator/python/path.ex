@@ -12,7 +12,7 @@ defmodule Torngen.Generator.Python.Path do
   end
 
   @impl true
-  def generate(%Torngen.Spec.Path{} = path, %Torngen.Spec{} = spec), do: raise("Not implemented")
+  def generate(%Torngen.Spec.Path{} = _path, %Torngen.Spec{} = _spec), do: raise("Not implemented")
 
   def generate(
         resource,
@@ -23,7 +23,7 @@ defmodule Torngen.Generator.Python.Path do
     rendered_string =
       "#{Torngen.Generator.Python.priv_path()}/path_resource.py.eex"
       |> EEx.eval_file(
-        resource: resource |> Macro.camelize(),
+        resource: resource,
         paths: paths,
         spec: spec
       )

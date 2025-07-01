@@ -2,9 +2,14 @@ from base_query import BaseQuery
 from base_path import Path
 from parameter import Parameter
 
-class <%= resource %>(BaseQuery):
+<%= for path <- paths do %>
+<%= for import <- path.response |> Torngen.Generator.Python.Schema.filter_imports() do %>
+from ..schema.<%= import |> Macro.underscore() %> import <%= import %><% end %>
+<% end %>
+
+class <%= resource |> Macro.camelize() %>(BaseQuery):
     """
-    A collection of paths representing `<%= resource %>`.
+    A collection of paths representing `<%= resource |> Macro.camelize() %>`.
 
     Paths
     -----
@@ -22,7 +27,7 @@ class <%= resource %>(BaseQuery):
     <% end %>"""
 
     <%= for path <- paths do %>
-    <%= path.path |> String.split("/") |> List.last() %> = Path("/<%= path.path %>", None, <%= for parameter <- path.parameters, do: "#{Torngen.Generator.Python.Parameter.generate_handler(parameter, spec)}, " %>)<% end %>
+    <%= path.path |> String.split("/") |> List.last() %> = Path("/<%= path.path %>", <%= Torngen.Spec.Schema.references(spec, path.response) %>, <%= for parameter <- path.parameters, do: "#{Torngen.Generator.Python.Parameter.generate_handler(parameter, spec)}, " %>)<% end %>
 
     def __init__(self):
-        super().__init__()
+        super().__init__(base_path="<%= resource %>")

@@ -32,7 +32,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -44,7 +44,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -56,7 +56,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -80,7 +80,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -92,7 +92,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -104,7 +104,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -116,7 +116,7 @@ defmodule Torngen.Generator.Python.Schema do
       |> EEx.eval_file(schema: schema, spec: spec, external: external)
       |> Torngen.Generator.cleanup()
 
-    {"schema/#{schema.reference}.py", rendered_string}
+    {"schema/#{schema.reference |> Macro.underscore()}.py", rendered_string}
   end
 
   @impl true
@@ -170,6 +170,9 @@ defmodule Torngen.Generator.Python.Schema do
         resolve_type(pair, spec)
       end)
 
+    # An anonymous typed dict is required when the Torn API spec does not have an identifier for the 
+    # dict.
+    # TODO: In the future, this should likely be a separate object and a separate generated file
     "typing.TypedDict(\"\", {#{map_inner}})"
   end
 
@@ -293,7 +296,7 @@ defmodule Torngen.Generator.Python.Schema do
   @spec filter_imports(schema :: Torngen.Spec.Schema.schema_types()) :: [String.t()]
   def filter_imports(%Torngen.Spec.Reference{ref: ref}) do
     "#/components/schemas/" <> ref_id = ref
-    ref_id
+    [ref_id]
   end
 
   def filter_imports(%{type: type} = _schema) do
