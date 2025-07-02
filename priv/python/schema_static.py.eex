@@ -1,12 +1,5 @@
-from ..base_schema import BaseSchema
+import typing
 <%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
-class <%= schema.reference %>(BaseSchema):
-    value: <%= Torngen.Generator.Python.Schema.resolve_type(schema, spec) %>
-
-    def parse(data):
-        if not isinstance(data, <%= schema |> Torngen.Generator.Python.Schema.resolve_type(spec) %>):
-            raise TypeError(f"Expected type {<%= schema |> Torngen.Generator.Python.Schema.resolve_type(spec) %>}, but got type {type(data)}")
-
-        return BaseSchema.parse(data, <%= schema |> Torngen.Generator.Python.Schema.resolve_type(spec) %>)
+<%= schema.reference %> = typing.NewType("<%= schema.reference %>", <%= Torngen.Generator.Python.Schema.resolve_type(schema, spec) %>)

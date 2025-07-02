@@ -1,10 +1,9 @@
-from ..base_schema import BaseSchema
+import typing
 <%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
-class <%= schema.reference %>(BaseSchema):
-    <%= if schema.type == :string do %><%!-- TODO: Add type to `values` --%>
-    values = [<%= for value <- schema.values do "\"#{value}\", " end %>]
-    <% else %>
-    values = [<%= for value <- schema.values do "#{value}, " end %>]
-    <% end %>
+<%= if schema.type == :string do %>
+<%= schema.reference %> = typing.Literal[<%= Enum.map_join(schema.values, ", ", fn value -> "\"" <> value <> "\"" end) %>]
+<% else %>
+<%= schema.reference %> = typing.Literal[<%= Enum.join(schema.values, ", ") %>]
+<% end %>

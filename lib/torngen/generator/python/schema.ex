@@ -269,10 +269,12 @@ defmodule Torngen.Generator.Python.Schema do
     ref_id
   end
 
-  def resolve_type(%Torngen.Spec.Reference{ref: ref} = _reference, %Torngen.Spec{} = spec, false) do
-    "#/components/schemas/" <> ref_id = ref
-
-    Torngen.Spec.Reference.retrieve(spec, ref_id)
+  def resolve_type(
+        %Torngen.Spec.Reference{ref: "#/components/schemas/" <> _ref_id = ref} = _reference,
+        %Torngen.Spec{} = spec,
+        false
+      ) do
+    Torngen.Spec.Reference.retrieve(spec, ref)
     |> resolve_type(spec)
   end
 
