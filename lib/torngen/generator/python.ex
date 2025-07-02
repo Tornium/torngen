@@ -16,6 +16,7 @@ defmodule Torngen.Generator.Python do
       spec
       |> Torngen.Generator.Python.Path.generate_all()
       |> Map.new(),
+      Torngen.Generator.Python.Path.generate_init(spec),
       spec
       |> Torngen.Generator.Python.Schema.generate_all()
       |> Map.new()

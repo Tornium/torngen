@@ -3,6 +3,27 @@ defmodule Torngen.Generator.Python.Path do
 
   @behaviour Torngen.Generator.Behavior.Path
 
+  @doc """
+  Generate the __init__.py file listing the paths.
+  """
+  @spec generate_init(spec :: Torngen.Spec.t()) :: %{String.t() => String.t()}
+  def generate_init(%Torngen.Spec{paths: paths} = spec) when is_list(paths) do
+    path_groups = 
+      paths
+      |> Enum.group_by(fn %Torngen.Spec.Path{path: path} -> base_path(path) end)
+      |> Enum.reject(fn {resource, _paths} -> resource == "" end)
+      |> Enum.map(fn {resource, _paths} -> resource end)
+
+    rendered_string = 
+      "#{Torngen.Generator.Python.priv_path()}/path__init__.py.eex"
+      |> EEx.eval_file(
+        path_groups: path_groups,
+        spec: spec
+      )
+
+    %{"path/__init__.py" => rendered_string}
+  end
+
   @impl true
   def generate_all(%Torngen.Spec{paths: paths} = spec) when is_list(paths) do
     paths

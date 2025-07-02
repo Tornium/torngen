@@ -68,7 +68,7 @@ class BaseQuery(object):
 
         # TODO: Test this
         for path_parameter, path_parameter_value in self.__path_parameters().items():
-            path.replace("{" + path_parameter + "}", str(path_parameter_value))
+            path = path.replace("{" + path_parameter + "}", str(path_parameter_value))
 
         # The parameters have already been validate by __validate_parameter when they were set so
         # they will not be validated now.

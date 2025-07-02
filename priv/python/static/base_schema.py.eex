@@ -80,7 +80,9 @@ class BaseSchema:
             return data
         elif origin is typing.Literal:
             args_string = textwrap.shorten(", ".join(args), width=30, placeholder="...")
-            raise ValueError(f"Data does not match any value in the literal with values {args_string}")
+            raise ValueError(
+                f"Data does not match any value in the literal with values {args_string}"
+            )
 
         if origin in (list, typing.List):
             if not isinstance(data, list):
