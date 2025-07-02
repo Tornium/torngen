@@ -74,7 +74,7 @@ class BaseSchema:
                 except Exception:
                     continue
 
-                raise TypeError(f"Data does not match any type in union {args}")
+            raise TypeError(f"Data does not match any type in union {args}")
 
         if origin is typing.Literal and data in args:
             return data

@@ -1,0 +1,1 @@
+- OneOf types (such as RacingSelectionName) result in str | str which can't be parsed
