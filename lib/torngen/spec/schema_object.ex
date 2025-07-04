@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Schema.Object do
-  @moduledoc ~S"""
+  @moduledoc """
   Schema of an object.
   """
 

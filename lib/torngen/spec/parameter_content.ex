@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Parameter.Content do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents content parameters for OpenAPI requests.
 
   This struct is intended to extend the base `Torngen.Spec.Parameter` struct when handling parameters for OpenAPI requests.
@@ -10,7 +10,7 @@ defmodule Torngen.Spec.Parameter.Content do
 
   defstruct [:content]
 
-  @typedoc ~S"""
+  @typedoc """
   Represents content parameters.
 
   ## Fields
