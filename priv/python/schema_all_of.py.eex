@@ -1,8 +1,17 @@
 import typing
+from dataclasses import dataclass
 
 from ..base_schema import BaseSchema
-<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
+@dataclass
 class <%= schema.reference %>(BaseSchema):
-    value: <%= Torngen.Generator.Python.Schema.resolve_type(schema, spec, false) %>
+    <%= for type <- schema.types do %><% type = Torngen.Spec.Reference.maybe_resolve(spec, type) %><%= for pair <- type.pairs do %>
+    <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>: <%= Torngen.Generator.Python.Schema.resolve_type(pair.value, spec) %><% end %><% end %>
+
+    @staticmethod
+    def parse(data):
+        return <%= schema.reference %>(<%= for type <- schema.types do %><% type = Torngen.Spec.Reference.maybe_resolve(spec, type) %><%= for pair <- type.pairs do %>
+        <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>=BaseSchema.parse(data.get("<%= pair.key %>"), <%= pair.value |> Torngen.Generator.Python.Schema.resolve_type(spec) %>),
+        <% end %><% end %>)

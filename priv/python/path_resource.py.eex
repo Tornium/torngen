@@ -3,7 +3,7 @@ from base_path import Path
 from parameter import Parameter
 
 <%= for path <- paths do %>
-<%= for import <- path.response |> Torngen.Generator.Python.Schema.filter_imports() do %>
+<%= for import <- path.response |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>
 from ..schema.<%= import |> Macro.underscore() %> import <%= import %><% end %>
 <% end %>
 

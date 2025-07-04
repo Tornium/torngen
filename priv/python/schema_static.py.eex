@@ -1,5 +1,5 @@
 import typing
-<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
 <%= schema.reference %> = typing.NewType("<%= schema.reference %>", <%= Torngen.Generator.Python.Schema.resolve_type(schema, spec) %>)

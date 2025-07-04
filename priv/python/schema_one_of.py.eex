@@ -1,8 +1,10 @@
 import typing
+from dataclasses import dataclass
 
 from ..base_schema import BaseSchema
-<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
+@dataclass
 class <%= schema.reference %>(BaseSchema):
     value: <%= Torngen.Generator.Python.Schema.resolve_type(schema, spec, false) %>

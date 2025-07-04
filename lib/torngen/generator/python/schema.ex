@@ -242,10 +242,21 @@ defmodule Torngen.Generator.Python.Schema do
     |> resolve_type(spec)
   end
 
-  def resolve_type(%Torngen.Spec.Schema.AllOf{types: types} = _schema, %Torngen.Spec{} = spec, _) do
-    joined_types = Enum.map_join(types, " | ", fn type -> resolve_type(type, spec) end)
-
-    "typing.List[#{joined_types}]"
+  def resolve_type(
+        %Torngen.Spec.Schema.AllOf{types: types} = _schema,
+        %Torngen.Spec{} = spec,
+        allow_reference
+      ) do
+    # NOTE: This makes the assumption that all schemas containing allOf are for objects
+    %Torngen.Spec.Schema.Object{
+      pairs:
+        Enum.flat_map(types, fn type ->
+          Torngen.Spec.Reference.maybe_resolve(spec, type) |> Map.fetch!(:pairs)
+        end),
+      nullable: false,
+      reference: nil
+    }
+    |> resolve_type(spec, allow_reference)
   end
 
   def resolve_type(
@@ -295,40 +306,54 @@ defmodule Torngen.Generator.Python.Schema do
 
   It is assumed that the necessary child imports will be done by these imports.
   """
-  @spec filter_imports(schema :: Torngen.Spec.Schema.schema_types()) :: [String.t()]
-  def filter_imports(%Torngen.Spec.Reference{ref: ref}) do
+  @spec filter_imports(schema :: Torngen.Spec.Schema.schema_types(), spec :: Torngen.Spec.t()) ::
+          [String.t()]
+  def filter_imports(%Torngen.Spec.Reference{ref: ref}, _spec) do
     "#/components/schemas/" <> ref_id = ref
     [ref_id]
   end
 
-  def filter_imports(%{type: type} = _schema) do
-    # e.g. array and enum
-    filter_imports(type)
-  end
-
-  def filter_imports(%{types: types} = _schema) do
-    # e.g. OneOf
+  def filter_imports(%Torngen.Spec.Schema.AllOf{types: types} = _schema, %Torngen.Spec{} = spec) do
+    # Given AllOf expands the types into types' code generation, the imports of the 
+    # child types will also be needed
     types
-    |> Enum.map(&filter_imports/1)
-    |> List.flatten()
-    |> Enum.uniq()
-    |> Enum.sort()
-  end
-
-  def filter_imports(schema) when is_map(schema) and is_map_key(schema, "reference") do
-    # e.g. non-inline object
-    [schema.reference]
-  end
-
-  def filter_imports(%Torngen.Spec.Schema.Object{pairs: pairs} = _schema) do
-    pairs
-    |> Enum.map(fn %Torngen.Spec.Schema.ObjectPair{value: value} = _pair ->
-      filter_imports(value)
+    |> Enum.map(fn type ->
+      Torngen.Spec.Reference.maybe_resolve(spec, type)
+      |> filter_imports(spec)
     end)
     |> List.flatten()
     |> Enum.uniq()
     |> Enum.sort()
   end
 
-  def filter_imports(_schema), do: []
+  def filter_imports(%{type: type} = _schema, %Torngen.Spec{} = spec) do
+    # e.g. array and enum
+    filter_imports(type, spec)
+  end
+
+  def filter_imports(%{types: types} = _schema, %Torngen.Spec{} = spec) do
+    # e.g. OneOf
+    types
+    |> Enum.map(fn type -> filter_imports(type, spec) end)
+    |> List.flatten()
+    |> Enum.uniq()
+    |> Enum.sort()
+  end
+
+  def filter_imports(schema, _spec) when is_map(schema) and is_map_key(schema, "reference") do
+    # e.g. non-inline object
+    [schema.reference]
+  end
+
+  def filter_imports(%Torngen.Spec.Schema.Object{pairs: pairs} = _schema, %Torngen.Spec{} = spec) do
+    pairs
+    |> Enum.map(fn %Torngen.Spec.Schema.ObjectPair{value: value} = _pair ->
+      filter_imports(value, spec)
+    end)
+    |> List.flatten()
+    |> Enum.uniq()
+    |> Enum.sort()
+  end
+
+  def filter_imports(_schema, _spec), do: []
 end

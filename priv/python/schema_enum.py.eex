@@ -1,5 +1,5 @@
 import typing
-<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports() do %>
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
 <%= if schema.type == :string do %>
