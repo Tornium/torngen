@@ -1,6 +1,9 @@
 # Torngen
 An [Elixir](https://elixir-lang.org) library to generate language-agnostic clients for the [Torn API](https://www.torn.com/swagger/index.html).
 
+> [!IMPORTANT]
+> The output of the `torngen` generator is not considered a derivative work and is not subject to the GPLv3 license.
+
 ## Supported Languages
 - Elixir
 - Python 3.x (in-dev)
