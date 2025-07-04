@@ -1,7 +1,7 @@
 defmodule Torngen.MixProject do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
 
   def project do
     [
@@ -44,7 +44,7 @@ defmodule Torngen.MixProject do
     [
       name: "torngen",
       description: "Language-agnostic code generator for the Torn APIv2",
-      files: ["lib", "mix.exs", "README.md", "LICENSE.md", "CHANGELOG.md"],
+      files: ["lib", "priv", "mix.exs", "README.md", "LICENSE.md", "CHANGELOG.md"],
       maintainers: ["tiksan"],
       licenses: ["GPL-3.0-only"],
       links: %{"GitHub" => "https://github.com/Tornium/torngen"}
