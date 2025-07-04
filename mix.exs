@@ -6,12 +6,15 @@ defmodule Torngen.MixProject do
   def project do
     [
       name: "Torngen",
-      description: "Language-agnostic code generator for the Torn API",
+      description: "Language-agnostic code generator for the Torn APIv2",
       app: :torngen,
       version: @version,
       elixir: "~> 1.18",
       deps: deps(),
       docs: docs(),
+      package: package(),
+      source_url: "https://github.com/Tornium/torngen",
+      homepage_url: "https://github.com/Tornium/torngen"
     ]
   end
 
@@ -34,6 +37,17 @@ defmodule Torngen.MixProject do
     [
       main: "readme",
       extras: ["README.md", "LICENSE.md"]
+    ]
+  end
+
+  defp package do
+    [
+      name: "torngen",
+      description: "Language-agnostic code generator for the Torn APIv2",
+      files: ["lib", "mix.exs", "README.md", "LICENSE.md", "CHANGELOG.md"],
+      maintainers: ["tiksan"],
+      licenses: ["GPL-3.0-only"],
+      links: %{"GitHub" => "https://github.com/Tornium/torngen"}
     ]
   end
 end
