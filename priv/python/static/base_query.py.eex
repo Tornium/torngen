@@ -1,3 +1,4 @@
+import re
 import typing
 import urllib.parse
 
@@ -66,7 +67,6 @@ class BaseQuery(object):
     def url(self, domain: str = "api.torn.com") -> str:
         path = f"/v2/{self.base_path}/"
 
-        # TODO: Test this
         for path_parameter, path_parameter_value in self.__path_parameters().items():
             path = path.replace("{" + path_parameter + "}", str(path_parameter_value))
 
@@ -89,9 +89,13 @@ class BaseQuery(object):
                 fragment="",
             )
         )
-        # TODO: Validate URL has all path parameters filled in
+
+        for missing_path_parameter in re.finditer(r".*\/{(.*)}.*", url):
+            raise RuntimeError(f"Missing path parameter {missing_path_parameter}")
+
         # TODO: Required parameters
         # TODO: Warn on deprecated parameters
+
         return url
 
     def parse(self) -> typing.Dict[str, BaseSchema]:
