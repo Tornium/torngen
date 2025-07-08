@@ -1,0 +1,1 @@
+<%= parameter.name |> Torngen.Generator.Python.handle_reserved() %> = Parameter("<%= parameter.name %>", "<%= parameter.in %>", required=<%= parameter.required |> Torngen.Generator.Python.to_string() %>, deprecated=<%= parameter.deprecated |> Torngen.Generator.Python.to_string() %>)<%!-- TODO: Add parameter type to this --%>

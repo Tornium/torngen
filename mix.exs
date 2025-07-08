@@ -1,7 +1,7 @@
 defmodule Torngen.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.2.0-dev"
 
   def project do
     [
@@ -29,7 +29,8 @@ defmodule Torngen.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.35", only: :dev, runtime: false},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:plug, "~> 1.18"}
     ]
   end
 

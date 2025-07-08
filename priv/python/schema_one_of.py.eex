@@ -1,0 +1,6 @@
+import typing
+
+<%= for import <- schema |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>
+from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
+
+<%= schema.reference %> = <%= Enum.map_join(schema.types, " | ", fn type -> Torngen.Generator.Python.Schema.resolve_type(type |> IO.inspect(), spec, false) end) %>

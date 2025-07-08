@@ -1,0 +1,7 @@
+<%= for path_group <- path_groups do %>
+from .<%= path_group %> import <%= path_group |> Macro.camelize() %>
+<% end %>
+
+__all__ = [<%= for path_group <- path_groups do %>
+    "<%= path_group |> Macro.camelize() %>",
+<% end %>]

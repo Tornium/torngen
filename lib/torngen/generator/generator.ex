@@ -16,7 +16,8 @@ defmodule Torngen.Generator do
       case generator do
         :md -> Torngen.Generator.Markdown
         :elixir -> Torngen.Generator.Elixir
-        _ -> raise "Unknown generator \"#{generator}\" provided in config"
+        :python -> Torngen.Generator.Python
+        _ -> raise "Unknown generator \":#{generator}\" provided in config"
       end
 
     generator_module.generate(spec)

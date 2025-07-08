@@ -110,6 +110,13 @@ defmodule Torngen.Spec.Schema do
     references(spec, Torngen.Spec.Reference.retrieve(spec, ref))
   end
 
+  def references(%Torngen.Spec{} = _spec, %{reference: reference}) when not is_nil(reference) do
+    # To avoid unnescessarily expanding anyOf, allOf, and oneOf when there is a reference already,
+    # just return the reference so that all parsing/handling can be done by the specific logic for
+    # schema type
+    [reference]
+  end
+
   def references(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.AllOf{types: types}) do
     Enum.flat_map(types, fn schema -> references(spec, schema) end)
   end
