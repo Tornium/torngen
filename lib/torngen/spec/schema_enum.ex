@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Schema.Enum do
-  @moduledoc ~S"""
+  @moduledoc """
   Schema of enum of a single type.
   """
 

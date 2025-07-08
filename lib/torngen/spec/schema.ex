@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Schema do
-  @moduledoc ~S"""
+  @moduledoc """
   ## External Resources
   - [Swagger Specification](https://swagger.io/specification/#response-object)
   - [Swagger Docs](https://swagger.io/docs/specification/v3_0/data-models/data-types/)

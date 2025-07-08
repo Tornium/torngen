@@ -66,7 +66,7 @@ defmodule Torngen.Client.Schema do
 
   @spec validate?(value :: any(), type :: module() | tuple()) :: boolean()
   def validate?(value, type) when is_atom(type) do
-    # See reasoning in parse/2
+    # See reasoning in parse/2 for atom types
 
     try do
       Kernel.apply(type, :validate?, [value])
@@ -75,10 +75,22 @@ defmodule Torngen.Client.Schema do
     end
   end
 
+  def validate?(value, {:object, pair_types}) do
+    Enum.all?(pair_types, fn {key, type} -> validate?(Map.get(value, key), type) end)
+  end
+
   def validate?(value, {:array, type}) when is_list(value) do
     value
     |> Enum.map(fn individual_value -> validate?(individual_value, type) end)
     |> Enum.all?()
+  end
+
+  def validate?(value, {:one_of, types}) do
+    Enum.any?(types, fn type -> validate?(value, type) end)
+  end
+
+  def validate?(value, {:all_of, types}) do
+    Enum.all?(types, fn type -> validate?(value, type) end)
   end
 
   def validate?(value, {:static, :string}) when is_binary(value), do: true

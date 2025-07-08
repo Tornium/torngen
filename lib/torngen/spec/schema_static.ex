@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Schema.Static do
-  @moduledoc ~S"""
+  @moduledoc """
   Schema for literal of schemas/sub-schemas such as integers.
   """
 

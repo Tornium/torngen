@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Parameter do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents all parameters for OpenAPI requests.
 
   ## External Resources
@@ -18,7 +18,7 @@ defmodule Torngen.Spec.Parameter do
     deprecated: false
   ]
 
-  @typedoc ~S"""
+  @typedoc """
   Represents all parameters.
 
   ## Fields
