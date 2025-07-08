@@ -10,24 +10,19 @@ from ..schema.<%= import |> Macro.underscore() %> import <%= import %><% end %>
 class <%= resource |> Macro.camelize() %>(BaseQuery):
     """
     A collection of paths representing `<%= resource |> Macro.camelize() %>`.
+    """
 
-    Paths
-    -----
-    <%= for path <- paths do %>- `/<%= path.path %>` : <%= path.summary || "N/A" %>
-    <% end %>
-
-    <%= for path <- paths do %>`/<%= path.path %>`
-    -------------
-    <%= path.summary %>
+    <%= for path <- paths do %>
+    <%= path.path |> String.split("/") |> List.last() %> = Path("/<%= path.path %>", <%= Torngen.Spec.Schema.references(spec, path.response) %>, <%= for parameter <- path.parameters, do: "#{Torngen.Generator.Python.Parameter.generate_handler(parameter, spec)}, " %>)
+    """
+    `/<%= path.path %>`: <%= path.summary %>
     <%= path.description %>
 
     # Parameters
-    <%= for parameter_unresolved <- path.parameters do %><% parameter = Torngen.Spec.Reference.maybe_resolve(spec, parameter_unresolved) %>- <%= parameter.name |> Torngen.Generator.Python.handle_reserved() %> : <%= parameter.description %><%= if parameter.deprecated do %> (DEPRECATED) <% end %>
+    <%= for parameter_unresolved <- path.parameters do %><% parameter = Torngen.Spec.Reference.maybe_resolve(spec, parameter_unresolved) %>- <%= parameter.name |> Torngen.Generator.Python.handle_reserved() %> : <%= parameter.description |> Plug.HTML.html_escape() %><%= if parameter.deprecated do %> (DEPRECATED) <% end %>
     <% end %>
-    <% end %>"""
-
-    <%= for path <- paths do %>
-    <%= path.path |> String.split("/") |> List.last() %> = Path("/<%= path.path %>", <%= Torngen.Spec.Schema.references(spec, path.response) %>, <%= for parameter <- path.parameters, do: "#{Torngen.Generator.Python.Parameter.generate_handler(parameter, spec)}, " %>)<% end %>
+    """
+    <% end %>
 
     def __init__(self):
         super().__init__(base_path="<%= paths |> List.first() |> Map.fetch!(:path) |> String.split("/") |> Enum.slice(0..-2//1) |> Enum.join("/") %>")

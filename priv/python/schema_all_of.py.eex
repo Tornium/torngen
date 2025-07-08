@@ -6,12 +6,12 @@ from ..base_schema import BaseSchema
 from .<%= import |> Macro.underscore() %> import <%= import %><% end %>
 
 @dataclass
-class <%= schema.reference %>(BaseSchema):
-    <%= for type <- schema.types do %><% type = Torngen.Spec.Reference.maybe_resolve(spec, type) %><%= for pair <- type.pairs do %>
-    <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>: <%= Torngen.Generator.Python.Schema.resolve_type(pair.value, spec) %><% end %><% end %>
+class <%= schema.reference %>(BaseSchema):<% pairs = Enum.flat_map(schema.types, fn type -> Torngen.Spec.Reference.maybe_resolve(spec, type) |> Map.get(:pairs, []) end) |> Enum.uniq_by(fn pair -> pair.key end) %>
+    <%= for pair <- pairs do %>
+    <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>: <%= Torngen.Generator.Python.Schema.resolve_type(pair.value, spec) %><% end %>
 
     @staticmethod
     def parse(data):
-        return <%= schema.reference %>(<%= for type <- schema.types do %><% type = Torngen.Spec.Reference.maybe_resolve(spec, type) %><%= for pair <- type.pairs do %>
+        return <%= schema.reference %>(<%= for pair <- pairs do %>
         <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>=BaseSchema.parse(data.get("<%= pair.key %>"), <%= pair.value |> Torngen.Generator.Python.Schema.resolve_type(spec) %>),
-        <% end %><% end %>)
+        <% end %>)
