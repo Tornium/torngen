@@ -3,10 +3,19 @@ import textwrap
 import types
 import typing
 import warnings
+from abc import ABC, abstractstaticmethod
 
 
-class BaseSchema:
+class BaseSchema(ABC):
+    """
+    Base representation of an Torn APIv2 response schema.
+
+    This base class will be used to parse API responses by the type hints and dataclasses
+    used for the schema.
+    """
+
     @staticmethod
+    @abstractstaticmethod
     def parse(data: dict):
         raise NotImplementedError("This should be implemented by the schema")
 
