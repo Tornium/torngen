@@ -198,12 +198,19 @@ defmodule Torngen.Generator.Python.Schema do
   end
 
   def resolve_type(
-        %Torngen.Spec.Schema.Enum{type: type} = _schema,
-        %Torngen.Spec{} = spec,
+        %Torngen.Spec.Schema.Enum{type: :string, values: values} = _schema,
+        %Torngen.Spec{} = _spec,
         _
       ) do
-    %Torngen.Spec.Schema.Static{type: type}
-    |> resolve_type(spec)
+    "typing.Literal[#{Enum.map_join(values, ", ", fn value -> "\"" <> value <> "\"" end)}]"
+  end
+
+  def resolve_type(
+        %Torngen.Spec.Schema.Enum{values: values} = _schema,
+        %Torngen.Spec{} = _spec,
+        _
+      ) do
+    "typing.Literal[#{Enum.join(values, ", ")}]"
   end
 
   def resolve_type(
