@@ -4,7 +4,7 @@ An [Elixir](https://elixir-lang.org) library to generate language-agnostic clien
 ## Supported Languages
 `torngen` currently supports the following languages (and the following generated clients):
 - Elixir: [`torngen_elixir_client`](https://github.com/Tornium/torngen_elixir_client)
-- Python 3.x (in-dev): [`torngen_python_client`](https://github.com/Tornium/torngen_python_client)
+- Python 3.x: [`torngen_python_client`](https://github.com/Tornium/torngen_python_client)
 - Markdown (partial): None
 
 ## Installation
