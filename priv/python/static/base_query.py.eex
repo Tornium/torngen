@@ -25,7 +25,38 @@ class _URLComponents(typing.NamedTuple):
     fragment: str
 
 
+class ParsedResponse:
+    """
+    Parsed API response accessor class.
+
+    Direct child fields of response schemas can be accessed using dot notation (e.g.
+    `query.parse().attacks` for `user/attacks`).
+    """
+
+    def __init__(self, parsed_response: typing.Dict[str, BaseSchema]):
+        self.parsed_response: typing.Dict[str, BaseSchema] = parsed_response
+
+    def __getattr__(self, name: str) -> typing.Optional[BaseSchema]:
+        parsed_selection_response: Path
+        for selection, parsed_selection_response in self.parsed_response.items():
+            if not hasattr(parsed_selection_response, name):
+                continue
+
+            return getattr(parsed_selection_response, name)
+
+        raise KeyError(f"The {name} key does not exist in any returned selection")
+
+
 class BaseQuery(object):
+    """
+    Base Torn APIv2 query object for a resource.
+
+    The generated client is based on a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) where
+    a query is built from a resource, at least one resource selection, and query/path parameters. After the
+    query has been built, the query can be run against an `HTTPAdapter` implementation and parsed against the
+    selected resource and selection(s).
+    """
+
     def __init__(self, base_path: str) -> typing.Self:
         self.base_path: str = base_path
         self.selections: typing.Set[Path] = set()
@@ -34,13 +65,20 @@ class BaseQuery(object):
         self.response: typing.Optional[dict] = None
 
     def select(self, *args: typing.Tuple[Path]) -> typing.Self:
-        if any(not self.__validate_path(path) for path in args):
+        """
+        Select at least one path belonging to the query's resource.
+        """
+
+        if any(not self.__validate_path__(path) for path in args):
             raise TypeError("At least one path is not of type Path")
 
         self.selections.update(args)
         return self
 
     def key(self, api_key: str) -> typing.Self:
+        """
+        Add an API key to the query.
+        """
         if not isinstance(api_key, str):
             raise TypeError("API key must be a string")
         elif len(api_key) != 16:
@@ -54,6 +92,14 @@ class BaseQuery(object):
     def get(
         self, adapter: typing.Type[HTTPAdapter], new_headers: typing.Dict[str, str] = {}
     ) -> typing.Self:
+        """
+        Perform the Torn APIv2 request.
+
+        This function performs a Torn APIv2 request for a URL generated against the query and store the response
+        in the query. Once the query has been performed, the API response can be parsed with `parse()`
+        or accessed directly with `.response`.
+        """
+
         headers = {
             "User-Agent": f"{adapter.client_name()} ({adapter.version()}) torngen/{VERSION}",
             "Content-Type": "application/json",
@@ -65,21 +111,28 @@ class BaseQuery(object):
         return self
 
     def url(self, domain: str = "api.torn.com") -> str:
+        """
+        Generate a URL for the query.
+
+        Create a URL necessary for a Torn APIv2 call for the query. If a domain is provided, the domain will
+        be used when creating the URL; otherwise, `api.torn.com` will be used.
+        """
+
         path = f"/v2/{self.base_path}/"
 
         if self.api_key is None:
             raise ValueError("An API key is required")
 
-        for path_parameter, path_parameter_value in self.__path_parameters().items():
+        for path_parameter, path_parameter_value in self.__path_parameters__().items():
             path = path.replace("{" + path_parameter + "}", str(path_parameter_value))
 
-        # The parameters have already been validate by __validate_parameter when they were set so
+        # The parameters have already been validate by __validate_paramter__ when they were set so
         # they will not be validated now.
         query_params = {
             "selections": ",".join(
                 selection.selection for selection in self.selections
             ),
-            **self.__query_parameters(),
+            **self.__query_parameters__(),
         }
 
         url = urllib.parse.urlunparse(
@@ -95,18 +148,24 @@ class BaseQuery(object):
 
         missing_path_parameter = re.search(r".*\/{(.*)}.*", url)
         if missing_path_parameter:
-            raise RuntimeError(f"Missing path parameter {missing_path_parameter.group(1)}")
+            raise RuntimeError(
+                f"Missing path parameter {missing_path_parameter.group(1)}"
+            )
 
         # TODO: Required parameters
         # TODO: Warn on deprecated parameters
 
         return url
 
-    def parse(self) -> typing.Dict[str, BaseSchema]:
+    def parse(self) -> ParsedResponse:
+        """
+        Parse an API response against the resource and resource selections.
+        """
+
         if self.response is None:
             raise ValueError("No API response has been stored")
 
-        parsed_response: typing.Dict[str, BaseSchema] = {}
+        parsed_response = {}
 
         selection: Path
         for selection in self.selections:
@@ -114,23 +173,19 @@ class BaseQuery(object):
                 self.response
             )
 
-        return parsed_response
+        return ParsedResponse(parsed_response)
 
-    def __getattr__(
-        self, parameter_name: str
-    ) -> typing.Callable[typing.Any, typing.Self]:
+    def __getattr__(self, name: str) -> typing.Callable[typing.Any, typing.Self]:
         def setter_method(value: str | int) -> typing.Self:
-            if not self.__validate_parameter(parameter_name, value):
-                raise ValueError(
-                    f"Invalid parameter {parameter_name} for the provided paths"
-                )
+            if not self.__validate_paramter__(name, value):
+                raise ValueError(f"Invalid parameter {name} for the provided paths")
 
-            self.parameters[parameter_name] = value
+            self.parameters[name] = value
             return self
 
         return setter_method
 
-    def __validate_parameter(
+    def __validate_paramter__(
         self, parameter_name: str, parameter_value: typing.Any
     ) -> bool:
         path: Path
@@ -146,7 +201,7 @@ class BaseQuery(object):
 
         return False
 
-    def __validate_path(self, value: Path | typing.Any) -> bool:
+    def __validate_path__(self, value: Path | typing.Any) -> bool:
         if not isinstance(value, Path):
             return False
 
@@ -156,7 +211,7 @@ class BaseQuery(object):
 
         return False
 
-    def __path_parameters(self) -> typing.Dict[str, str | int]:
+    def __path_parameters__(self) -> typing.Dict[str, str | int]:
         valid_path_parameters = set()
 
         path: Path
@@ -180,7 +235,7 @@ class BaseQuery(object):
             if parameter_name in valid_path_parameters
         }
 
-    def __query_parameters(self) -> typing.Dict[str, str | int]:
+    def __query_parameters__(self) -> typing.Dict[str, str | int]:
         valid_query_parameters = set()
 
         path: Path
