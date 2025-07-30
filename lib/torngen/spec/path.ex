@@ -49,8 +49,20 @@ defmodule Torngen.Spec.Path do
       %Torngen.Spec.Path{
         path: path,
         tags: tags,
-        summary: Map.get(data, "summary", nil),
-        description: Map.get(data, "description", nil),
+        summary:
+          data
+          |> Map.get("summary", "N/A")
+          |> String.replace(["<br>", "\n"], " ")
+          |> String.split()
+          |> Enum.join(" ")
+          |> String.trim(),
+        description:
+          data
+          |> Map.get("description", "N/A")
+          |> String.replace(["<br>", "\n"], " ")
+          |> String.split()
+          |> Enum.join(" ")
+          |> String.trim(),
         parameters: parameters,
         response: Torngen.Spec.Schema.parse(spec, response_schema)
       }
