@@ -1,8 +1,7 @@
 defmodule Torngen.Generator.FS do
   @moduledoc false
 
-  @outdir Application.compile_env(:torngen, :out_dir) ||
-            raise("Missing output directory in config")
+  @outdir Application.compile_env(:torngen, :out_dir, nil)
 
   @spec write_files(map()) :: nil
   def write_files(%{} = files) do
@@ -17,6 +16,8 @@ defmodule Torngen.Generator.FS do
   end
 
   defp do_create_dirs([directory | remaining_directories]) do
+    outdir_valid!()
+
     @outdir
     |> Path.join(directory)
     |> Path.expand()
@@ -28,6 +29,8 @@ defmodule Torngen.Generator.FS do
   defp do_create_dirs([]), do: nil
 
   defp do_write_files([{file_path, file_data} | remaining_files]) do
+    outdir_valid!()
+
     @outdir
     |> Path.join(file_path)
     |> Path.expand()
@@ -37,4 +40,13 @@ defmodule Torngen.Generator.FS do
   end
 
   defp do_write_files([]), do: nil
+
+  @spec outdir_valid!() :: boolean()
+  defp outdir_valid!() do
+    if is_nil(@outdir) do
+      raise("Missing output directory in config")
+    end
+
+    true
+  end
 end
