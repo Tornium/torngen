@@ -79,6 +79,12 @@ defmodule Torngen.Generator.Elixir do
   def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{key: key, value: value})
       when is_binary(key) do
     # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
+    {String.to_atom(key), repr(spec, value)}
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{key: key, value: value})
+      when is_atom(key) do
+    # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
     {key, repr(spec, value)}
   end
 
