@@ -1,7 +1,7 @@
 defmodule Torngen.MixProject do
   use Mix.Project
 
-  @version "0.1.3"
+  @version "0.1.4-dev"
 
   def project do
     [
