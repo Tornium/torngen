@@ -11,10 +11,10 @@ class <%= schema.reference %>(BaseSchema):
     JSON object of `<%= schema.reference %>`.
     """
     <%= for pair <- schema.pairs do %>
-    <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>: <%= Torngen.Generator.Python.Schema.resolve_type(pair.value, spec) %><% end %>
+    <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>: <%= pair.value |> Torngen.Generator.Python.Schema.resolve_type(spec) |> Torngen.Generator.Python.Schema.wrap_optional(not pair.required) %><% end %>
 
     @staticmethod
     def parse(data):
         return <%= schema.reference %>(<%= for pair <- schema.pairs do %>
-        <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>=BaseSchema.parse(data.get("<%= pair.key %>"), <%= pair.value |> Torngen.Generator.Python.Schema.resolve_type(spec) %>),
+        <%= pair.key |> Torngen.Generator.Python.handle_reserved() %>=BaseSchema.parse(data.get("<%= pair.key %>"), <%= pair.value |> Torngen.Generator.Python.Schema.resolve_type(spec) |> Torngen.Generator.Python.Schema.wrap_optional(not pair.required) %>),
         <% end %>)

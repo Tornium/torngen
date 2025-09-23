@@ -186,15 +186,25 @@ defmodule Torngen.Generator.Python.Schema do
   end
 
   def resolve_type(
-        %Torngen.Spec.Schema.ObjectPair{key: key, value: value} = _schema,
+        %Torngen.Spec.Schema.ObjectPair{key: key, value: value, required: true} = _schema,
         %Torngen.Spec{} = spec,
         _
       )
       when is_binary(key) do
     # The key of an object pair should always be a string due to the JSON Schema spec (assumed)
-    # TODO: Update parser to add required flag to k-v pairs and update the type resolver
 
     "\"#{key}\": #{resolve_type(value, spec)}"
+  end
+
+  def resolve_type(
+        %Torngen.Spec.Schema.ObjectPair{key: key, value: value, required: false} = _schema,
+        %Torngen.Spec{} = spec,
+        _
+      )
+      when is_binary(key) do
+    # The key of an object pair should always be a string due to the JSON Schema spec (assumed)
+
+    "\"#{key}\": typing.Optional[#{resolve_type(value, spec)}]"
   end
 
   def resolve_type(
@@ -372,4 +382,12 @@ defmodule Torngen.Generator.Python.Schema do
   end
 
   def filter_imports(_schema, _spec), do: []
+
+  def wrap_optional(string, true) when is_binary(string) do
+    "typing.Optional[#{string}]"
+  end
+
+  def wrap_optional(string, false) when is_binary(string) do
+    string
+  end
 end
