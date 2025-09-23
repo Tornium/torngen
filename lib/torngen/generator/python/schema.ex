@@ -164,6 +164,15 @@ defmodule Torngen.Generator.Python.Schema do
     reference
   end
 
+  def resolve_type(
+        %Torngen.Spec.Schema.Object{pairs: pairs} = _schema,
+        %Torngen.Spec{} = _spec,
+        _
+      )
+      when pairs == [] do
+    "typing.Dict[str, typing.Any]"
+  end
+
   def resolve_type(%Torngen.Spec.Schema.Object{pairs: pairs} = _schema, %Torngen.Spec{} = spec, _) do
     map_inner =
       Enum.map_join(pairs, ",\n", fn %Torngen.Spec.Schema.ObjectPair{} = pair ->
