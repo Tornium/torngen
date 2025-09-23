@@ -14,7 +14,7 @@ by adding `torngen` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:torngen, "~> 0.1.0"}
+    {:torngen, "~> 0.1"}
   ]
 end
 ```
