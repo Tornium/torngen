@@ -21,6 +21,10 @@ defmodule Torngen.Client.Schema do
     Kernel.apply(type, :parse, [value])
   end
 
+  def parse(value, {:object, :any}) do
+    Map.new(value)
+  end
+
   def parse(value, {:object, pair_types}) do
     try do
       pair_types

@@ -67,6 +67,10 @@ defmodule Torngen.Generator.Elixir do
     |> Module.concat(ref)
   end
 
+  def repr(%Torngen.Spec{} = _spec, %Torngen.Spec.Schema.Object{pairs: pairs}) when pairs == [] do
+    {:object, :any}
+  end
+
   def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.Object{pairs: pairs}) do
     {
       :object,
