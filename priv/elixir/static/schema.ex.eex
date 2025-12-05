@@ -62,6 +62,14 @@ defmodule Torngen.Client.Schema do
     |> Map.new()
   end
 
+  def parse(value, {:enum, _type, _valid_value} = enum_type) do
+    if validate?(value, enum_type) do
+      value
+    else
+      nil
+    end
+  end
+
   def parse(value, {:static, type}) do
     if validate?(value, {:static, type}) do
       value
@@ -102,6 +110,14 @@ defmodule Torngen.Client.Schema do
 
   def validate?(value, {:all_of, types}) do
     Enum.all?(types, fn type -> validate?(value, type) end)
+  end
+
+  def validate?(value, {:enum, type, [valid_value]}) when is_atom(type) do
+    value == valid_value and validate?(value, {:static, type})
+  end
+
+  def validate?(value, {:enum, type, valid_values}) when is_atom(type) and is_list(valid_values) do
+    Enum.member?(valid_values, value) and validate?(value, {:static, type})
   end
 
   def validate?(value, {:static, :string}) when is_binary(value), do: true
