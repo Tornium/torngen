@@ -19,7 +19,12 @@ defmodule Torngen.Generator.Elixir.Path do
 
     rendered_string =
       "#{Torngen.Generator.Elixir.priv_path()}/path.ex.eex"
-      |> EEx.eval_file(path_module_name: path_module_name, response_module_names: response_module_names, path: path, spec: spec)
+      |> EEx.eval_file(
+        path_module_name: path_module_name,
+        response_module_names: response_module_names,
+        path: path,
+        spec: spec
+      )
       |> Torngen.Generator.cleanup()
 
     {"path/#{path.path}.ex", rendered_string}

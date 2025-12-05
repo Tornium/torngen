@@ -105,7 +105,9 @@ defmodule Torngen.Spec.Schema do
     :any
   end
 
-  @spec references(spec :: Torngen.Spec.t(), schema :: Torngen.Spec.Schema.schema_types()) :: [String.t()]
+  @spec references(spec :: Torngen.Spec.t(), schema :: Torngen.Spec.Schema.schema_types()) :: [
+          String.t()
+        ]
   def references(%Torngen.Spec{} = spec, %Torngen.Spec.Reference{ref: ref}) do
     references(spec, Torngen.Spec.Reference.retrieve(spec, ref))
   end

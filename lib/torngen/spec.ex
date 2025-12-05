@@ -75,7 +75,6 @@ defmodule Torngen.Spec do
         } = _data
       )
       when is_map(info) do
-
     %Torngen.Spec{
       open_api_version: open_api_version
     }

@@ -8,13 +8,13 @@ defmodule Torngen.Generator.Python.Path do
   """
   @spec generate_init(spec :: Torngen.Spec.t()) :: %{String.t() => String.t()}
   def generate_init(%Torngen.Spec{paths: paths} = spec) when is_list(paths) do
-    path_groups = 
+    path_groups =
       paths
       |> Enum.group_by(fn %Torngen.Spec.Path{path: path} -> base_path(path) end)
       |> Enum.reject(fn {resource, _paths} -> resource == "" end)
       |> Enum.map(fn {resource, _paths} -> resource end)
 
-    rendered_string = 
+    rendered_string =
       "#{Torngen.Generator.Python.priv_path()}/path__init__.py.eex"
       |> EEx.eval_file(
         path_groups: path_groups,
@@ -33,7 +33,8 @@ defmodule Torngen.Generator.Python.Path do
   end
 
   @impl true
-  def generate(%Torngen.Spec.Path{} = _path, %Torngen.Spec{} = _spec), do: raise("Not implemented")
+  def generate(%Torngen.Spec.Path{} = _path, %Torngen.Spec{} = _spec),
+    do: raise("Not implemented")
 
   def generate(
         resource,

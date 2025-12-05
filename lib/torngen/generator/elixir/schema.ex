@@ -188,13 +188,14 @@ defmodule Torngen.Generator.Elixir.Schema do
         %Torngen.Spec.Schema.Enum{type: type, values: [value]} = _schema,
         %Torngen.Spec{} = _spec
       ) do
-     if type == :string, do: "String.t()", else: value
+    if type == :string, do: "String.t()", else: value
   end
 
   def resolve_type(
         %Torngen.Spec.Schema.Enum{type: type, values: values} = _schema,
         %Torngen.Spec{} = _spec
-  ) when is_list(values) do
+      )
+      when is_list(values) do
     if type == :string do
       "String.t()"
     else

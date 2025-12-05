@@ -16,7 +16,8 @@ defmodule Torngen.Spec.Schema.Object do
         %{"type" => "object", "required" => required_keys, "properties" => properties} = schema
       ) do
     %Torngen.Spec.Schema.Object{
-      pairs: Torngen.Spec.Schema.ObjectPair.parse_many(spec, Map.to_list(properties), required_keys),
+      pairs:
+        Torngen.Spec.Schema.ObjectPair.parse_many(spec, Map.to_list(properties), required_keys),
       nullable: Map.get(schema, "nullable", false),
       reference: Map.get(schema, "reference", nil)
     }
