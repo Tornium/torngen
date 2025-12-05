@@ -19,4 +19,17 @@ defmodule Torngen.Spec.Schema.Enum do
       reference: Map.get(schema, "reference", nil)
     }
   end
+
+  @spec to_string(enum :: t()) :: String.t()
+  def to_string(%__MODULE__{type: type, values: [value]}) do
+    if type == :string, do: "\"#{value}\"", else: value
+  end
+
+  def to_string(%__MODULE__{type: type, values: values}) when is_list(values) do
+    if type == :string do
+      Enum.map_join(values, ", ", fn value -> "\"#{value}\"" end)
+    else
+      Enum.join(values, ", ")
+    end
+  end
 end

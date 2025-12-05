@@ -185,11 +185,21 @@ defmodule Torngen.Generator.Elixir.Schema do
   end
 
   def resolve_type(
-        %Torngen.Spec.Schema.Enum{type: type} = _schema,
-        %Torngen.Spec{} = spec
+        %Torngen.Spec.Schema.Enum{type: type, values: [value]} = _schema,
+        %Torngen.Spec{} = _spec
       ) do
-    %Torngen.Spec.Schema.Static{type: type}
-    |> resolve_type(spec)
+     if type == :string, do: "String.t()", else: value
+  end
+
+  def resolve_type(
+        %Torngen.Spec.Schema.Enum{type: type, values: values} = _schema,
+        %Torngen.Spec{} = _spec
+  ) when is_list(values) do
+    if type == :string do
+      "String.t()"
+    else
+      Enum.join(values, " | ")
+    end
   end
 
   def resolve_type(%Torngen.Spec.Schema.OneOf{reference: reference}, %Torngen.Spec{} = _spec)
