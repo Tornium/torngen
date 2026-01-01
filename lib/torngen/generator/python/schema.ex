@@ -390,4 +390,35 @@ defmodule Torngen.Generator.Python.Schema do
   def wrap_optional(string, false) when is_binary(string) do
     string
   end
+
+  @doc """
+  Flatten an `AllOf` schema into a list of object key-value pairs.
+
+  We can assume that there will not be an `AllOf` schema that doesn't contain objects.
+  """
+  @spec flatten_all_of(schema :: Torngen.Spec.Schema.AllOf.t(), spec :: Torngen.Spec.t()) :: [
+          Torngen.Spec.Schema.ObjectPair.t()
+        ]
+  def flatten_all_of(%Torngen.Spec.Schema.AllOf{} = schema, %Torngen.Spec{} = spec) do
+    do_flatten_all_of(schema, spec)
+  end
+
+  defp do_flatten_all_of(
+         %Torngen.Spec.Schema.AllOf{types: types} = _schema,
+         %Torngen.Spec{} = spec
+       ) do
+    types
+    |> Enum.map(fn type ->
+      Torngen.Spec.Reference.maybe_resolve(spec, type) |> do_flatten_all_of(spec)
+    end)
+    |> List.flatten()
+    |> Enum.uniq()
+  end
+
+  defp do_flatten_all_of(
+         %Torngen.Spec.Schema.Object{pairs: pairs} = _schema,
+         %Torngen.Spec{} = _spec
+       ) do
+    pairs
+  end
 end
