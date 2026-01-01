@@ -21,6 +21,11 @@ class BaseSchema(ABC):
 
     @staticmethod
     def parse(data: typing.Any, type_hints: typing.Type[typing.Any]) -> typing.Any:
+        if type_hints == typing.Any:
+            # typing.Any needs to be handled seperately as instanceof doesn't work with this
+            # type hint
+            return data
+
         origin = typing.get_origin(type_hints)
         args = typing.get_args(type_hints)
 
