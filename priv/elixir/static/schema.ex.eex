@@ -13,8 +13,8 @@ defmodule Torngen.Client.Schema do
   """
   @callback validate?(any()) :: boolean()
 
-  @spec parse(value :: any(), type :: module() | tuple()) :: any()
-  def parse(value, type) when is_atom(type) do
+  @spec parse(value :: any(), type :: tuple()) :: any()
+  def parse(value, {:ref, type}) when is_atom(type) do
     # When the type is an atom, the atom can be assumed to be the module referenced
     # Other types will be modules that will have to be parsed in-line
 
@@ -83,8 +83,8 @@ defmodule Torngen.Client.Schema do
     nil
   end
 
-  @spec validate?(value :: any(), type :: module() | tuple()) :: boolean()
-  def validate?(value, type) when is_atom(type) do
+  @spec validate?(value :: any(), type :: tuple()) :: boolean()
+  def validate?(value, {:ref, type}) when is_atom(type) do
     # See reasoning in parse/2 for atom types
 
     try do

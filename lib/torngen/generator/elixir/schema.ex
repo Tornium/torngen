@@ -166,14 +166,23 @@ defmodule Torngen.Generator.Elixir.Schema do
   end
 
   def resolve_type(
-        %Torngen.Spec.Schema.ObjectPair{key: key, value: value} = _schema,
+        %Torngen.Spec.Schema.ObjectPair{key: key, value: value, required: true} = _schema,
         %Torngen.Spec{} = spec
       )
       when is_binary(key) do
     # The key of an object pair should always be a string due to the JSON Schema spec (assumed)
-    # TODO: Update parser to add required flag to k-v pairs and update the type resolver
+    # ":#{key} => #{resolve_type(value, spec)}"
+    "#{key}: #{resolve_type(value, spec)}"
+  end
 
-    ":#{key} => #{resolve_type(value, spec)}"
+  def resolve_type(
+        %Torngen.Spec.Schema.ObjectPair{key: key, value: value, required: false} = _schema,
+        %Torngen.Spec{} = spec
+      )
+      when is_binary(key) do
+    # The key of an object pair should always be a string due to the JSON Schema spec (assumed)
+    # ":#{key} => nil | #{resolve_type(value, spec)}"
+    "#{key}: nil | #{resolve_type(value, spec)}"
   end
 
   def resolve_type(

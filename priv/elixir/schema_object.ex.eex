@@ -12,13 +12,13 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   ]
 
   @type t :: %__MODULE__{<%= for pair <- schema.pairs do %>
-    <%= pair.key %>: <%= Torngen.Generator.Elixir.Schema.resolve_type(pair.value, spec) %>,<% end %>
+    <%= Torngen.Generator.Elixir.Schema.resolve_type(pair, spec) %>,<% end %>
   }
 
   @impl true
   def parse(%{} = data) do
     %__MODULE__{<%= for pair <- schema.pairs do %><%= if not String.contains?(pair.key, "-") do %>
-      <%= pair.key %>: data |> Map.get("<%= pair.key %>") |> Torngen.Client.Schema.parse(<%= Torngen.Generator.Elixir.repr(spec, pair.value) |> inspect() %>),<% end %><% end %>
+      <%= pair.key %>: data |> Map.get("<%= pair.key %>") |> Torngen.Client.Schema.parse(<%= Torngen.Generator.Elixir.repr(spec, pair) |> Tuple.to_list() |> Enum.at(1) |> inspect() %>),<% end %><% end %>
     }
   end
 

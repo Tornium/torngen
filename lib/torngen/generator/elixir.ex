@@ -63,8 +63,10 @@ defmodule Torngen.Generator.Elixir do
     # This applies to anything with a reference as the referenced module can have its own parsing and validation
     # excluding Tornium.Spec.Reference as that needs to dereference the reference first
     # e.g. objects and statics containing a reference
-    Torngen.Client.Schema
-    |> Module.concat(ref)
+    {
+      :ref,
+      Module.concat(Torngen.Client.Schema, ref)
+    }
   end
 
   def repr(%Torngen.Spec{} = _spec, %Torngen.Spec.Schema.Object{pairs: pairs}) when pairs == [] do
@@ -80,16 +82,56 @@ defmodule Torngen.Generator.Elixir do
     }
   end
 
-  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{key: key, value: value})
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{
+        key: key,
+        value: value,
+        required: true
+      })
       when is_binary(key) do
     # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
     {String.to_atom(key), repr(spec, value)}
   end
 
-  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{key: key, value: value})
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{
+        key: key,
+        value: value,
+        required: true
+      })
       when is_atom(key) do
     # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
     {key, repr(spec, value)}
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{
+        key: key,
+        value: value,
+        required: false
+      })
+      when is_binary(key) do
+    # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
+    {type, value_repr} =
+      case repr(spec, value) do
+        {k, v} -> {k, v}
+        module when is_atom(module) -> {:ref, module}
+      end
+
+    {String.to_atom(key), {:one_of, [{:static, :null}, {type, value_repr}] |> Keyword.new()}}
+  end
+
+  def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.ObjectPair{
+        key: key,
+        value: value,
+        required: false
+      })
+      when is_atom(key) do
+    # Nothing should have an ObjectPair that isn't a child of an Object so this will not include a type
+    {type, value_repr} =
+      case repr(spec, value) do
+        {k, v} -> {k, v}
+        module when is_atom(module) -> {:ref, module}
+      end
+
+    {key, {:one_of, [{:static, :null}, {type, value_repr}] |> Keyword.new()}}
   end
 
   def repr(%Torngen.Spec{} = spec, %Torngen.Spec.Schema.Array{type: array_type}) do
