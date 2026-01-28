@@ -6,6 +6,7 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   defstruct [:values]
 
   @type t :: %__MODULE__{values: [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.Schema.resolve_type(type, spec) end) |> Enum.join(" | ") %>]}
+  @types [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.repr(spec, type) |> inspect() end) |> Enum.join(", ") %>]
 
   @impl true
   def parse(%{} = data) do
@@ -18,8 +19,7 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   def parse(_data), do: nil
 
   @impl true
-  def validate?(%{} = _data), do: true
-
-  @impl true
-  def validate?(_data), do: false
+  def validate?(data) do
+    Enum.all?(@types, fn type -> Torngen.Client.Schema.validate?(data, type) end)
+  end
 end

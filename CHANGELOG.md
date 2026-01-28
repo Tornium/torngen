@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- \[Elixir\] Fixed validation in `allOf`
 - \[Elixir\] Fixed parsing and validation of valid types in `oneOf`
 
 ## 0.1.6 - 2026-01-01
