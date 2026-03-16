@@ -1,7 +1,7 @@
 import typing
 
-from base_schema import BaseSchema
-from parameter import Parameter
+from .base_schema import BaseSchema
+from .parameter import Parameter
 
 
 class Path:

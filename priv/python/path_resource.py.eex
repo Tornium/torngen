@@ -1,6 +1,6 @@
-from base_query import BaseQuery
-from base_path import Path
-from parameter import Parameter
+from ..base_query import BaseQuery
+from ..base_path import Path
+from ..parameter import Parameter
 
 <%= for path <- paths do %>
 <%= for import <- path.response |> Torngen.Generator.Python.Schema.filter_imports(spec) do %>

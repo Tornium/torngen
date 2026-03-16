@@ -2,9 +2,9 @@ import re
 import typing
 import urllib.parse
 
-from base_path import Path
-from base_schema import BaseSchema
-from adapter import HTTPAdapter
+from .base_path import Path
+from .base_schema import BaseSchema
+from .adapter import HTTPAdapter
 
 VERSION = "<%= spec.api_version %>"
 
