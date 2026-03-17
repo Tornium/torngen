@@ -22,8 +22,8 @@ class BaseSchema(ABC):
     @staticmethod
     def parse(data: typing.Any, type_hints: typing.Type[typing.Any]) -> typing.Any:
         if type_hints == typing.Any:
-            # typing.Any needs to be handled seperately as instanceof doesn't work with this
-            # type hint
+            # typing.Any needs to be handled seperately as instanceof doesn't
+            # work with this type hint
             return data
 
         origin = typing.get_origin(type_hints)
@@ -36,8 +36,22 @@ class BaseSchema(ABC):
                 return dict(data)
             elif len(args) == 2:
                 # Dict with typed keys and values
-                # TODO: Add parsing and type validation to keys and values
-                return dict(data)
+                key_type, value_type = args
+                parsed_dict = {}
+
+                for key, value in data.items():
+                    try:
+                        parsed_key = BaseSchema.parse(key, key_type)
+                    except Exception:
+                        raise TypeError(f"Dict has key {key} of type {type(key)} but should be of type {key_type}")
+                    try:
+                        parsed_value = BaseSchema.parse(value, value_type)
+                    except Exception:
+                        raise TypeError(f"Dict has value {value} of type {type(value)} but should be of type {value_type}")
+
+                    parsed_dict[parsed_key] = parsed_value
+
+                return parsed_dict
             else:
                 raise TypeError(f"Dict has {len(args)} types but there should be 0 or 2.")
 
@@ -75,7 +89,9 @@ class BaseSchema(ABC):
             return None
 
         if isinstance(type_hints, type):
-            if type_hints in (int, float, str, bool):
+            if type_hints in (int, float, str, bool) and not isinstance(data, type_hints):
+                raise TypeError(f"{data} should be of type {type_hints} but is of type {type(data)}")
+            elif type_hints in (int, float, str, bool):
                 # We should just cast primitives since they aren't wrapped and don't have to
                 # be parsed individually
                 return type_hints(data)
@@ -100,7 +116,7 @@ class BaseSchema(ABC):
                 except Exception:
                     continue
 
-            raise TypeError(f"Data does not match any type in union {args}")
+            raise TypeError(f"Data {data} does not match any type in union {args}")
 
         if origin is typing.Literal and data in args:
             return data
