@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - \[Python\] Added parsing and type validation of `typing.Dict` types
+- \[Python\] Added type validation of primitives
 
 ### Fixed
 - \[Python\] Fixed relative imports
