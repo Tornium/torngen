@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - \[Python\] Added parsing and type validation of `typing.Dict` types
 - \[Python\] Added type validation of primitives
+- Added parsing of `schema`-typed parameter specifications
 
 ### Fixed
 - \[Python\] Fixed relative imports

@@ -24,7 +24,7 @@ defmodule Torngen.Spec.Parameter do
   ## Fields
     * `name` - Name of the parameter. Correspond to the key used for the parameter (except for `:header` parameters).
     * `in` - Location of the parameter.
-    * `body` - N/A
+    * `body` - Type of the parameter
     * `reference` - Reference identifier to a parameter's schema.
     * `description` - Description of the parameter (either text or markdown).
     * `required` - Mandatory parameter flag.
@@ -81,31 +81,21 @@ defmodule Torngen.Spec.Parameter do
     %Torngen.Spec.Reference{ref: path}
   end
 
-  def parse(
-        %{
-          "schema" => _schema
-        } = parameter,
-        %Torngen.Spec{} = spec
-      ) do
-    parsed_schema = nil
-    # parsed_schema = Torngen.Spec.Parameter.Schema.parse(schema)
-    # TODO: Add parameter schema parser
+  def parse(parameter, %Torngen.Spec{} = spec) when is_map(parameter) and is_map_key(parameter, "schema") do
+    parsed_schema = Torngen.Spec.Parameter.Schema.parse(spec, parameter)
 
     parameter
     |> Map.delete("schema")
     |> parse(spec)
     |> Map.put(:body, parsed_schema)
+    |> IO.inspect()
   end
 
-  def parse(
-        %{
-          "content" => _content
-        } = parameter,
-        %Torngen.Spec{} = spec
-      ) do
+  def parse(parameter, %Torngen.Spec{} = spec)
+      when is_map(parameter) and is_map_key(parameter, "content") do
     parsed_content = nil
     # parsed_content = Torngen.Spec.Parameter.Content.parse(content)
-    # TODO: Add parameter content parser
+    # TODO: Add parameter content parser. This is currently an unused feature
 
     parameter
     |> Map.delete("content")
