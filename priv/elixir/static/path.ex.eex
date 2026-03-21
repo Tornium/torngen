@@ -21,6 +21,14 @@ defmodule Torngen.Client.Path do
   @callback path_selection() :: {String.t(), String.t() | nil}
 
   @doc """
+  Get the list of valid response modules (`Torngen.Client.Schema.*`) the API may return for this path.
+
+  If there are multiple values in the list, this typically indicates that the API will return one of
+  those response schemas/modules.
+  """
+  @callback response_modules() :: [module()]
+
+  @doc """
   Get the list of parameters the query would accept.
   """
   @callback parameters() :: [atom()]
