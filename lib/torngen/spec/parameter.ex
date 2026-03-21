@@ -88,7 +88,6 @@ defmodule Torngen.Spec.Parameter do
     |> Map.delete("schema")
     |> parse(spec)
     |> Map.put(:body, parsed_schema)
-    |> IO.inspect()
   end
 
   def parse(parameter, %Torngen.Spec{} = spec)
