@@ -64,7 +64,7 @@ class BaseQuery(object):
         self.api_key: typing.Optional[str] = None
         self.response: typing.Optional[dict] = None
 
-    def select(self, *args: typing.Tuple[Path]) -> typing.Self:
+    def select(self, *args: Path) -> typing.Self:
         """
         Select at least one path belonging to the query's resource.
         """
