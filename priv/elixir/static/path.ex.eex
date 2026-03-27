@@ -45,6 +45,11 @@ defmodule Torngen.Client.Path do
   """
   @callback parse(response :: map() | list()) :: list()
 
+  @doc """
+  Get the `@moduledoc` of the path module.
+  """
+  @callback moduledoc() :: String.t()
+
   @doc false
   def path_selection(path) do
     path
