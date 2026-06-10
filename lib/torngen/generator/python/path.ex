@@ -27,6 +27,7 @@ defmodule Torngen.Generator.Python.Path do
   @impl true
   def generate_all(%Torngen.Spec{paths: paths} = spec) when is_list(paths) do
     paths
+    |> Enum.reject(fn %Torngen.Spec.Path{response_type: response_type} -> response_type == :csv end)
     |> Enum.group_by(fn %Torngen.Spec.Path{path: path} -> base_path(path) end)
     |> Enum.reject(fn {resource, _paths} -> resource == "" end)
     |> Enum.map(fn {resource, paths} when is_list(paths) -> generate(resource, paths, spec) end)

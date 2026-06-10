@@ -5,7 +5,9 @@ defmodule Torngen.Generator.Elixir.Path do
 
   @impl true
   def generate_all(%Torngen.Spec{paths: paths} = spec) when is_list(paths) do
-    do_generate_all(paths, spec, [])
+    paths
+    |> Enum.reject(fn %Torngen.Spec.Path{response_type: response_type} -> response_type == :csv end)
+    |> do_generate_all(spec, [])
   end
 
   @impl true

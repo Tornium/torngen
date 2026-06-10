@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `:response_type` to the `Torngen.Spec.Path` to support CSV responses
 
+### Removed
+- Removed non-JSON responses from the code generation
+
 ## 0.1.10 - 2026-27-03
 ### Added
 - \[Elixir\] Added `moduledoc/0` to the `Torngen.Client.Path.*` template
