@@ -1,5 +1,5 @@
 defmodule Torngen.Spec.Path do
-  defstruct [:path, :tags, :summary, :description, :parameters, :response]
+  defstruct [:path, :tags, :summary, :description, :parameters, :response, :response_type]
 
   @type t :: %__MODULE__{
           path: String.t(),
@@ -7,7 +7,8 @@ defmodule Torngen.Spec.Path do
           summary: String.t() | nil,
           description: String.t(),
           parameters: [Torngen.Spec.Parameter.t()],
-          response: Torngen.Spec.Reference.t() | Torngen.Spec.Schema.schema_types()
+          response: Torngen.Spec.Reference.t() | Torngen.Spec.Schema.schema_types(),
+          response_type: :json | :csv
         }
 
   @spec parse_many(spec :: Torngen.Spec.t(), paths :: map()) :: Torngen.Spec.t()
@@ -64,7 +65,64 @@ defmodule Torngen.Spec.Path do
           |> Enum.join(" ")
           |> String.trim(),
         parameters: parameters,
-        response: Torngen.Spec.Schema.parse(spec, response_schema)
+        response: Torngen.Spec.Schema.parse(spec, response_schema),
+        response_type: :json
+      }
+      | path_accumulator
+    ])
+  end
+
+  def parse(
+        %Torngen.Spec{} = spec,
+        [
+          {
+            "/" <> path,
+            %{
+              "get" =>
+                %{
+                  "tags" => tags,
+                  "responses" => %{
+                    "200" => %{
+                      "content" => %{"text/csv" => %{"schema" => response_schema}}
+                    }
+                  }
+                } = data
+            }
+          }
+          | paths_remaining
+        ],
+        path_accumulator
+      ) do
+    parameters =
+      data
+      |> Map.get("parameters", [])
+      |> Enum.map(fn parameter ->
+        parameter
+        |> Map.put("reference", nil)
+        |> Torngen.Spec.Parameter.parse(spec)
+      end)
+
+    parse(spec, paths_remaining, [
+      %Torngen.Spec.Path{
+        path: path,
+        tags: tags,
+        summary:
+          data
+          |> Map.get("summary", "N/A")
+          |> String.replace(["<br>", "\n"], " ")
+          |> String.split()
+          |> Enum.join(" ")
+          |> String.trim(),
+        description:
+          data
+          |> Map.get("description", "N/A")
+          |> String.replace(["<br>", "\n"], " ")
+          |> String.split()
+          |> Enum.join(" ")
+          |> String.trim(),
+        parameters: parameters,
+        response: Torngen.Spec.Schema.parse(spec, response_schema),
+        response_type: :csv
       }
       | path_accumulator
     ])
