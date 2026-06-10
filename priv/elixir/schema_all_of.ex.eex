@@ -6,12 +6,12 @@ defmodule Torngen.Client.Schema.<%= schema.reference %> do
   defstruct [:values]
 
   @type t :: %__MODULE__{values: [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.Schema.resolve_type(type, spec) end) |> Enum.join(" | ") %>]}
-  @types [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.repr(spec, type) |> inspect() end) |> Enum.join(", ") %>]
+  @types [<%= schema.types |> Enum.map(fn type -> Torngen.Generator.Elixir.repr(spec, type) |> inspect(limit: :infinity) end) |> Enum.join(", ") %>]
 
   @impl true
   def parse(%{} = data) do
     %__MODULE__{values: [<%= for type <- schema.types do %>
-      data |> Torngen.Client.Schema.parse(<%= Torngen.Generator.Elixir.repr(spec, type) |> inspect() %>),<% end %>
+      data |> Torngen.Client.Schema.parse(<%= Torngen.Generator.Elixir.repr(spec, type) |> inspect(limit: :infinity) %>),<% end %>
     ]}
   end
 
