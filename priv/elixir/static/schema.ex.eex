@@ -95,7 +95,9 @@ defmodule Torngen.Client.Schema do
   end
 
   def validate?(value, {:object, pair_types}) do
-    Enum.all?(pair_types, fn {key, type} -> validate?(Map.get(value, key), type) end)
+    Enum.all?(pair_types, fn {key, type} ->
+      validate?(Map.get(value, Atom.to_string(key)), type)
+    end)
   end
 
   def validate?(value, {:array, type}) when is_list(value) do

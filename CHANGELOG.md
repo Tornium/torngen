@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - \[Elixir\] Fixed `inspect/2` on some schemas shortening the generated code with `...`
+- \[Elixir\] Fixed object validation failing when parsing
 
 ### Removed
 - Removed non-JSON responses from the code generation
